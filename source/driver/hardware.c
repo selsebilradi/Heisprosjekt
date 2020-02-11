@@ -157,7 +157,7 @@ void hardware_command_floor_indicator_on(int floor){
         io_set_bit(LIGHT_FLOOR_IND2);
     }
     else{
-        io_set_bit(LIGHT_FLOOR_IND2);
+        io_clear_bit(LIGHT_FLOOR_IND2);
     }
 }
 
