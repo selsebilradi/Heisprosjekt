@@ -10,6 +10,16 @@
 /**
  * @brief Functionality for when desired floor is reached
  */
+typedef enum {
+	MOVE_UP,
+	MOVE_DOWN, 
+	STANDING_STILL, 
+	DOOR_OPEN
+} state;
+
+/**
+ * @brief Functionality for when desired floor is reached
+ */
 void destination_reached(double floor);
 
 /**
