@@ -1,4 +1,4 @@
-#include "ElevatorStateMachine.h"
+#include "elevatorStateMachine.h"
 #include <stdio.h>
 #include "hardware.h"
 #include "channels.h"
