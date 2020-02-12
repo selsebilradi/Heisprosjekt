@@ -39,10 +39,20 @@ void clearQueue(elevatorOrder * queue);
 /**
  * @brief Sets the elevator to an undefined state and drives it to an defined state before start.
  * 
- *
  */
 
 void elevator_init();
+
+/**
+ * @brief Elevator functionality when stop button is pressed.
+ * 
+ */
+void elevator_safety_function(); //kan ha et bedre navn
+/**
+ * @brief Changes the state of the elevator when queue is empty.
+ * 
+ */
+void empty_queue();
 
 #endif
 
