@@ -27,3 +27,20 @@ void empty_queue(){
 		state = STANDING_STILL;
 	}
 }
+
+int checkQueue(elevatorOrder * queue){
+	if ((queue[0].floor==-1)&&(queue[0].orderType==NONE)){
+		return 0;
+	}
+	else{
+	return 1;
+	}
+}
+
+
+void clearQueue(elevatorOrder * queue, int length){
+	for (int i = 0; i < length; i++){
+		queue[i].floor=-1;
+		queue[i].orderType=NONE;
+	}
+}
