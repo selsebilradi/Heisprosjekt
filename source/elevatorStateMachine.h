@@ -8,7 +8,7 @@
 #ifndef ELEVATORSTATEMACHINE_H
 
 /**
- * @brief Functionality for when desired floor is reached
+ * @brief Defines states used in ElevatorFSM
  */
 typedef enum {
 	MOVE_UP,
