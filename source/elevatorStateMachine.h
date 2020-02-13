@@ -15,7 +15,7 @@ typedef enum {
 	MOVE_DOWN, 
 	STANDING_STILL, 
 	DOOR_OPEN
-} state;
+} State;
 
 /**
  * @brief Functionality for when desired floor is reached
