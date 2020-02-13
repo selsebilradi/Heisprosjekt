@@ -1,17 +1,44 @@
+/**
+ * @file
+ * @brief Library for functions for modifying a queue of ElevatorOrders
+ */
 #ifndef QUEUE_H
 #define QUEUE_H
 
 #include "hardware.h"
 
 typedef struct{
-	double floor; //lagrar som double for seinare bruk med sjekk om den er mellom etasjer. 
+	double floor;
 	HardwareOrder orderType;
 }ElevatorOrder;
 
- 
-void popQueue(ElevatorOrder* queue);
+ /**
+ * @brief Pops the first element of @p queue
+ *
+ * @param queue A queue of ElevatorOrders
+ * @param length Length of @p queue 
+ */
+void popQueue(ElevatorOrder* queue, int length);
 
-void sortQueue(ElevatorOrder* queue);
+
+ /**
+ * @brief Delete all orders to floor @p floor
+ *
+ * @param queue A queue of ElevatorOrders
+ * @param length Length of @p queue 
+ * @param floor Floor number of the floor that all orders to shall be deleted
+ */
+
+void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor);
+
+ /**
+ * @brief Sorts @p queue for efficient and correct elevator behaviourss
+ *
+ * @param queue A queue of ElevatorOrders
+ * @param length Length of @p queue 
+ * @param state State of elevator
+ */
+void sortQueue(ElevatorOrder* queue, int length, State state);
 
 
 #endif
