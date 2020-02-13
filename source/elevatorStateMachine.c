@@ -28,7 +28,7 @@ void empty_queue(){
 	}
 }
 
-int checkQueue(elevatorOrder * queue){
+int checkQueue(ElevatorOrder * queue){
 	if ((queue[0].floor==-1)&&(queue[0].orderType==NONE)){
 		return 0;
 	}
@@ -38,7 +38,7 @@ int checkQueue(elevatorOrder * queue){
 }
 
 
-void clearQueue(elevatorOrder * queue, int length){
+void clearQueue(ElevatorOrder * queue, int length){
 	for (int i = 0; i < length; i++){
 		queue[i].floor=-1;
 		queue[i].orderType=NONE;

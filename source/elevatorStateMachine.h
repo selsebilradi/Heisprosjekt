@@ -27,14 +27,14 @@ void destination_reached(double floor);
  * 
  * @return Returns 0 if queue is empty. Returns 1 otherwise.
  */
-int checkQueue(elevatorOrder * queue);
+int checkQueue(ElevatorOrder * queue);
 
 /**
  * @brief Clears the queue for all orders and fills it with empty orders.
  * 
  * @warning Will only be called when stop button is pushed.
  */
-void clearQueue(elevatorOrder * queue);
+void clearQueue(ElevatorOrder * queue);
 
 /**
  * @brief Sets the elevator to an undefined state and drives it to an defined state before start.

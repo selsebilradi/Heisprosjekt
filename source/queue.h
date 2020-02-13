@@ -6,12 +6,12 @@
 typedef struct{
 	double floor; //lagrar som double for seinare bruk med sjekk om den er mellom etasjer. 
 	HardwareOrder orderType;
-}elevatorOrder;
+}ElevatorOrder;
 
  
-void popQueue(elevatorOrder* queue);
+void popQueue(ElevatorOrder* queue);
 
-void sortQueue(elevatorOrder* queue);
+void sortQueue(ElevatorOrder* queue);
 
 
 #endif
