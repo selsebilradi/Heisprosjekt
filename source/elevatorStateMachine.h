@@ -54,5 +54,11 @@ void elevator_safety_function(); //kan ha et bedre navn
  */
 void empty_queue();
 
+/**
+ * @brief Countdown for lights and door.
+ * 
+ */
+void timer(int seconds);
+
 #endif
 

@@ -1,10 +1,11 @@
 #include "elevatorStateMachine.h"
 #include <stdio.h>
 #include "hardware.h"
-#include "channels.h"
-#include "io.h"
 #include <stdlib.h>
 #include "queue.h"
+#include <unistd.h>
+#include <stdlib.h>
+
 State g_state;
 int g_queue_length;
 ElevatorOrder g_queue[6];
@@ -71,5 +72,13 @@ void elevator_init(){
 	clearQueue(g_queue);
 	}
 	
+void timer(int seconds){
+    while(1){
+        seconds--;
+		sleep(1);
+        if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
+			break;
+		}
 
+    }
 }
