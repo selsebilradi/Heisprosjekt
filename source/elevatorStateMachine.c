@@ -13,6 +13,11 @@ double g_floor;
 void destination_reached(double floor){
 	hardware_command_door_open(1); //skal være åpen i 3 sekunder. timer(3)?
 	hardware_command_floor_indicator_on(floor);
+	hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
+	hardware_command_order_light(floor, HARDWARE_ORDER_UP, 0);
+	hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
+	popQueue(g_queue);
+
 }
 
 void elevator_safety_function(){
@@ -51,8 +56,20 @@ void clearQueue(ElevatorOrder * queue, int length){
 }
 
 void elevator_init(){
-	if (hardware_read_floor_sensor(0)|| hardware_read_floor_sensor(1)||hardware_read_floor_sensor(2)|| hardware_read_floor_sensor(3)){
-		g_state=STANDING_STILL;
+	
+	g_floor=0;
+	hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+	while (1){
+		if (hardware_read_floor_sensor(g_floor)==1){
+			hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+			break;
+		}
+		
 	}
+	hardware_command_floor_indicator_on(g_floor);
+	State=STANDING_STILL;
+	clearQueue(g_queue);
+	}
+	
 
 }

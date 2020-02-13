@@ -37,7 +37,7 @@ int checkQueue(ElevatorOrder * queue);
 void clearQueue(ElevatorOrder * queue);
 
 /**
- * @brief Sets the elevator to an undefined state and drives it to an defined state before start.
+ * @brief Sets the elevator to floor 1 as default start.
  * 
  */
 
