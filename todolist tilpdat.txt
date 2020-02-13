@@ -1,0 +1,6 @@
+- legg inn lokal?global? variabel queueLength i elevatorSM i klassediagrammet
+	->Clearqueue skal ta inn denne
+- må passe på at før kvar gong checkqueue blir kalt, så kalla vi sortqueue
+- trur vi greie oss uten hardwaremovement i order-structen
+	->har i alle fall tatt den ut
+	->la til none i hardwareOrder
