@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "queue.h"
 #include "hardware.h"
 
@@ -26,7 +28,7 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor){
 	}	
 
 	if (numberOfOrders == 0){
-		break;
+		return;
 	}
 
 	int* indexes = malloc(numberOfOrders*sizeof(int));
@@ -41,14 +43,14 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor){
 		}
 	}
 
-	for (int i = 0; i <= offset; i++;){
-		for (int j = indexes[i]-1; j < length-1 ;j++){
-			queue[j].floor = queue[j+1];
-			queue[j].orderType = queue[j+1].orderType;
+	for (int i = 0; i < offset; i++){
+		for (int j = indexes[i]; j < length-1 ;j++){
+			queue[j-i].floor = queue[j-i+1];
+			queue[j-i].orderType = queue[j-i+1].orderType;
 		}
 	}
 
-	for (int i = length-offset-1; i < length; i++){
+	for (int i = length-numberOfOrders; i < length; i++){
 		queue[i].floor=-1;
 		queue[i].orderType=NONE;
 	}
