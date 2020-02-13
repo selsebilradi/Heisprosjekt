@@ -36,12 +36,22 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor){
 
 	for (int i = 0; i < length; i++){
 		if (queue[i].floor == floor){
-			indexes[offset] = i;  //funka ditta?
+			indexes[offset] = i;
 			offset++;
 		}
 	}
-	
-	
-	
+
+	for (int i = 0; i <= offset; i++;){
+		for (int j = indexes[i]-1; j < length-1 ;j++){
+			queue[j].floor = queue[j+1];
+			queue[j].orderType = queue[j+1].orderType;
+		}
+	}
+
+	for (int i = length-offset-1; i < length; i++){
+		queue[i].floor=-1;
+		queue[i].orderType=NONE;
+	}
+
 	free(indexes);
 };
