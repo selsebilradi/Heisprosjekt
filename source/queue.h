@@ -40,5 +40,14 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor);
  */
 void sortQueue(ElevatorOrder* queue, int length, State state);
 
+/**
+ * @brief Adds order to the queue if the order is not placed in queue before.
+ *
+ * @param floor The desired floor for an order.
+ * @param orderType The type of order.
+ * 
+ */
+void addOrder(int floor,HardwareOrder orderType);
+
 
 #endif
