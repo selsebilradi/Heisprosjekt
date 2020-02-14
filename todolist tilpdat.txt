@@ -6,3 +6,5 @@
 	->la til none i hardwareOrder
 - legg inn global variabel g-queue og g_floor og g_state i classy diagram
 - deklarere og definere sortQueue i eSM?
+- addOrder(floor, orderType, queue)
+	-> en funksjon som sjekka om d e duplikat i queue og evt legge i køen viss d ikkje e d.
