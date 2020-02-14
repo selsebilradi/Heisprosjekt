@@ -8,4 +8,25 @@ if (hardware_read_stop_signal()==1){
 		}
 	}
 
+
+
+void addOrder(int floor,HardwareOrder orderType){
+	int duplicate=0;
+	for (int i=0; i<g_queue_length; i++){
+		if (g_queue[i].floor==floor && g_queue[i].orderType== orderType){
+			duplicate=1;	
+		}	
+		
+	}
+	
+	if (duplicate==0){
+		for (int j=0; j<g_queue_length; j++){
+				if(g_queue[j].floor==-1 && g_queue[j].orderType==NONE){
+					g_queue[j].floor=floor;
+					g_queue[j].orderType=orderType;
+					break;
+	}
+	
+}
+
     

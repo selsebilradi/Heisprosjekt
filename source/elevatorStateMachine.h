@@ -1,3 +1,4 @@
+
 /**
  * @file
  * @brief Elevator functionality
@@ -19,11 +20,15 @@ typedef enum {
 
 /**
  * @brief Functionality for when desired floor is reached
+ * 
+ * @param floor The desired floor the elevator has reached
  */
-void destination_reached(double floor);
+void floorReached(int floor);
 
 /**
  * @brief Checks if queue is empty.
+ * 
+ * @param queue A queue of ElevatorOrder
  * 
  * @return Returns 0 if queue is empty. Returns 1 otherwise.
  */
@@ -31,6 +36,8 @@ int checkQueue(ElevatorOrder * queue);
 
 /**
  * @brief Clears the queue for all orders and fills it with empty orders.
+ * 
+ * @param queue A queue of ElevatorOrder
  * 
  * @warning Will only be called when stop button is pushed.
  */
@@ -41,24 +48,45 @@ void clearQueue(ElevatorOrder * queue);
  * 
  */
 
-void elevator_init();
+void elevatorInit();
 
 /**
  * @brief Elevator functionality when stop button is pressed.
  * 
  */
-void elevator_safety_function(); //kan ha et bedre navn
+void elevatorSafetyFunction(); //kan ha et bedre navn
 /**
  * @brief Changes the state of the elevator when queue is empty.
  * 
  */
-void empty_queue();
+void emptyQueue();
 
 /**
  * @brief Countdown for lights and door.
  * 
  */
 void timer(int seconds);
+
+/**
+ * @brief Checks if elevator is at floor in the first order.
+ * 
+ * @param seconds The desired amout of seconds we wish to stall the elevator.
+ */
+int destinationIsReached();
+
+/**
+ * @brief Sets the order lights and floor indicator lights based on where the elevator is.
+ * 
+ */
+void lights();
+
+/**
+ * @brief The logic for the elevator.
+ * 
+ * @return Returns 1 if elevator is at ordered floor, and 0 if not.
+ */
+int main();
+
 
 #endif
 
