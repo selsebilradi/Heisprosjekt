@@ -181,10 +181,6 @@ int main(){
     }
 	elevatorInit();
 	while(1){
-		int floor1=hardware_read_floor_sensor(0);
-		int floor2=hardware_read_floor_sensor(1);
-		int floor3=hardware_read_floor_sensor(2);
-		int floor4=hardware_read_floor_sensor(3);
 
 		lights();
 
