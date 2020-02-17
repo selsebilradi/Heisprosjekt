@@ -117,12 +117,16 @@ void elevatorInit(){
 
 
 
-// denne er ikke ferdig.
 void timer(int milliseconds){
+	int time=milliseconds;
     while(1){
         milliseconds--;
-		sleep(0.001);
+		sleep(1);
         if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
+			timer(time);
+			break;
+		}
+		if (milliseconds==0){
 			break;
 		}
 
