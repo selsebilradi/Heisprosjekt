@@ -150,19 +150,19 @@ void lights(){
             /* Light for internal orders*/
             if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
                 hardware_command_order_light(f, HARDWARE_ORDER_INSIDE, 1);
-				//addOrder(f, HARDWARE_ORDER_INSIDE);
+				addOrder(f, HARDWARE_ORDER_INSIDE);
             }
 
             /* Lights for orders going up*/
             if(hardware_read_order(f, HARDWARE_ORDER_UP)){
                 hardware_command_order_light(f, HARDWARE_ORDER_UP, 1);
-				//addOrder(f, HARDWARE_ORDER_UP);
+				addOrder(f, HARDWARE_ORDER_UP);
             }
 
             /* Lights for orders going down */
             if(hardware_read_order(f, HARDWARE_ORDER_DOWN)){
                 hardware_command_order_light(f, HARDWARE_ORDER_DOWN, 1);
-				//addOrder(f, HARDWARE_ORDER_DOWN);
+				addOrder(f, HARDWARE_ORDER_DOWN);
             }
         }
 		
@@ -175,7 +175,7 @@ void lights(){
 
 		}
 }
-static void clear_all_order_lights(){
+void clear_all_order_lights(){
     HardwareOrder order_types[3] = {
         HARDWARE_ORDER_UP,
         HARDWARE_ORDER_INSIDE,
@@ -189,11 +189,7 @@ static void clear_all_order_lights(){
         }
     }
 }
-static void sigint_handler(int sig){
-	(void)(sig);
-	printf("Terminating elevator\n");
-	exit(1);
-}
+
 
 int main(){
 	int error = hardware_init();
@@ -201,7 +197,8 @@ int main(){
         fprintf(stderr, "Unable to initialize hardware\n");
         exit(1);
     }
-	singal(SIGINT, sigint_handler);
+	//singal(SIGINT, sigint_handler);
+
 	elevatorInit();
 	while(1){
 

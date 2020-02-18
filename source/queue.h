@@ -6,12 +6,12 @@
 #define QUEUE_H
 
 #include "hardware.h"
-#include "elevatorStateMachine.h"
+//#include "elevatorStateMachine.h"
 
 typedef struct{
-	double floor;
+	int floor;
 	HardwareOrder orderType;
-}ElevatorOrder;
+} ElevatorOrder;
 
  /**
  * @brief Pops the first element of @p queue
@@ -19,6 +19,7 @@ typedef struct{
  * @param queue A queue of ElevatorOrders
  * @param length Length of @p queue 
  */
+
 void popQueue(ElevatorOrder* queue, int length);
 
 

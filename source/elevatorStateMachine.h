@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "queue.h"
 
+
 /**
  * @brief Defines states used in ElevatorFSM
  */
@@ -20,6 +21,11 @@ typedef enum {
 	STANDING_STILL, 
 	DOOR_OPEN
 } State;
+
+extern State g_state;
+extern int g_queue_length;
+extern int g_floor;
+extern ElevatorOrder g_queue[6];
 
 /**
  * @brief Functionality for when desired floor is reached
@@ -88,13 +94,15 @@ void lights();
  * @brief Turns off all order lights.
  * 
  */
-static void clear_all_order_lights();
+void clear_all_order_lights();
 
 /**
  * @brief The logic for the elevator.
  * 
  * @return Returns 1 if elevator is at ordered floor, and 0 if not.
  */
+
+//static void sigint_handler(int sig);
 int main();
 
 

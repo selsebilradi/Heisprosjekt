@@ -2,7 +2,8 @@
 
 #include "queue.h"
 #include "hardware.h"
-
+#include "elevatorStateMachine.h"
+//extern ElevatorOrder g_queue[6];
 
 //ubrukelig funksjon, kast seinare
 void popQueue(ElevatorOrder* queue, int length){
@@ -42,7 +43,7 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
 
 	for (int i = 0; i < offset; i++){
 		for (int j = indexes[i]; j < length-1 ;j++){
-			queue[j-i].floor = queue[j-i+1];
+			queue[j-i].floor = queue[j-i+1].floor;
 			queue[j-i].orderType = queue[j-i+1].orderType;
 		}
 	}
@@ -73,4 +74,5 @@ void addOrder(int floor,HardwareOrder orderType){
 		}
 	
 	}
+}
 }
