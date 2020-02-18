@@ -207,6 +207,8 @@ int main(){
 	switch (g_state)
 	{
 	case STANDING_STILL:
+		timer(30000);
+		hardware_command_door_open(0);
 		checkQueue(g_queue);
 		for (int i=0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
 			if (g_queue[i-1].floor>g_queue[i].floor){
