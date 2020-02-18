@@ -46,3 +46,12 @@ void timer(int milliseconds){
     }
 }
     
+
+if(hardware_read_order(1,HARDWARE_ORDER_UP)){
+	hardware_command_order_light(1,HARDWARE_ORDER_UP,1);
+	hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+
+	    timer(3);		
+	hardware_command_movement(HARDWARE_MOVEMENT_UP);
+	hardware_command_order_light(1,HARDWARE_ORDER_UP,0);
+	}

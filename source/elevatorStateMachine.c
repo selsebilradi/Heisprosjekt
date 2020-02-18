@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include "hardware.h"
 #include <stdlib.h>
-#include "queue.h"
 #include <unistd.h>
 #include <stdlib.h>
 

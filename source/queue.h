@@ -6,7 +6,7 @@
 #define QUEUE_H
 
 #include "hardware.h"
-
+#include "elevatorStateMachine.h"
 typedef struct{
 	double floor;
 	HardwareOrder orderType;

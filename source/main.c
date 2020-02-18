@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "hardware.h"
 #include <unistd.h>
+#include "elevatorStateMachine.h"
+#include "queue.h"
 
 void timer(int milliseconds){
 	int time=milliseconds;
@@ -33,6 +35,7 @@ int main(){
 
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
+    lights();
 
     hardware_command_movement(HARDWARE_MOVEMENT_UP);
 

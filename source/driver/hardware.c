@@ -1,7 +1,6 @@
 #include "hardware.h"
 #include "channels.h"
 #include "io.h"
-#include <stdio.h> //Den her har vi lagt inn
 
 #include <stdlib.h>
 
@@ -9,7 +8,7 @@ static int hardware_legal_floor(int floor, HardwareOrder order_type){
     int lower_floor = 0;
     int upper_floor = HARDWARE_NUMBER_OF_FLOORS - 1;
 
-    if(floor < lower_floor || floor >= upper_floor){
+    if(floor < lower_floor || floor > upper_floor){
         return 0;
     }
 
