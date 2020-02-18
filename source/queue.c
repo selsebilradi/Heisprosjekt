@@ -70,6 +70,7 @@ void addOrder(int floor,HardwareOrder orderType){
 					g_queue[j].floor=floor;
 					g_queue[j].orderType=orderType;
 					break;
-	}
+		}
 	
+	}
 }
