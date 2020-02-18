@@ -55,3 +55,10 @@ if(hardware_read_order(1,HARDWARE_ORDER_UP)){
 	hardware_command_movement(HARDWARE_MOVEMENT_UP);
 	hardware_command_order_light(1,HARDWARE_ORDER_UP,0);
 	}
+
+
+static void sigint_handler(int sig){
+	(void)(sig);
+	printf("Terminating elevator\n");
+	exit(1);
+}
