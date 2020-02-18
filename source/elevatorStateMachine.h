@@ -82,6 +82,12 @@ int destinationIsReached();
 void lights();
 
 /**
+ * @brief Turns off all order lights.
+ * 
+ */
+static void clear_all_order_lights();
+
+/**
  * @brief The logic for the elevator.
  * 
  * @return Returns 1 if elevator is at ordered floor, and 0 if not.
