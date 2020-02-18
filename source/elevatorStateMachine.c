@@ -1,3 +1,5 @@
+#define _DEFAULT_SOURCE
+
 #include "elevatorStateMachine.h"
 #include <stdio.h>
 #include "hardware.h"
@@ -117,16 +119,16 @@ void elevatorInit(){
 
 
 
-void timer(int milliseconds){
-	int time=milliseconds;
+void timer(int mcseconds){
+	int time=mcseconds;
     while(1){
-        milliseconds--;
-		sleep(1);
+        mcseconds--;
+		usleep(1);
         if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
 			timer(time);
 			break;
 		}
-		if (milliseconds==0){
+		if (mcseconds==0){
 			break;
 		}
 
