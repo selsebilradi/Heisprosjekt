@@ -1,6 +1,28 @@
+#define _DEFAULT_SOURCE
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "hardware.h"
+#include <unistd.h>
+
+void timer(int milliseconds){
+	int time=milliseconds;
+    while(1){
+        milliseconds--;
+		usleep(1);
+        if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
+            hardware_command_floor_indicator_on(2);
+			timer(time);
+			break;
+		}
+		if (milliseconds==0){
+            hardware_command_floor_indicator_on(1);
+			break;
+		}
+
+    }
+}
 
 int main(){
     int error = hardware_init();
@@ -26,5 +48,13 @@ int main(){
         if(hardware_read_floor_sensor(HARDWARE_NUMBER_OF_FLOORS - 1)){
             hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
         }
+	if(hardware_read_order(1,HARDWARE_ORDER_UP)){
+	   hardware_command_order_light(1, HARDWARE_ORDER_UP,1);
+	   hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+	   timer(30000);	
+	   hardware_command_order_light(1, HARDWARE_ORDER_UP,0);
+	   hardware_command_movement(HARDWARE_MOVEMENT_UP);
+	
+	}
     }
 }

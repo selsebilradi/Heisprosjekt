@@ -1,6 +1,7 @@
 #include "hardware.h"
 #include "channels.h"
 #include "io.h"
+#include <stdio.h> //Den her har vi lagt inn
 
 #include <stdlib.h>
 
@@ -38,6 +39,9 @@ static int hardware_order_type_bit(HardwareOrder order_type){
         case HARDWARE_ORDER_DOWN:
             type_bit = 1;
             break;
+	default:
+	printf("Invalid input");
+	break; //NB: Den casen her har vi lagt til..
     }
 
     return type_bit;
