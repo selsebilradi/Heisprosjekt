@@ -1,4 +1,4 @@
-SOURCES := main.c
+SOURCES := elevatorStateMachine.c
 
 SOURCE_DIR := source
 BUILD_DIR := build
