@@ -8,3 +8,6 @@
 - deklarere og definere sortQueue i eSM?
 - addOrder(floor, orderType, queue)
 	-> en funksjon som sjekka om d e duplikat i queue og evt legge i køen viss d ikkje e d.
+
+
+-\!!! NB: VI har modifisert hardware.c....
