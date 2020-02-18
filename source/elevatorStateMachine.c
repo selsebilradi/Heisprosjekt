@@ -20,7 +20,7 @@ void floorReached(int floor){
 	hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
 	deleteOrdersOnFloor(g_queue, g_queue_length, floor);
 
-	timer(3);
+	timer(3000);
 	hardware_command_door_open(0);
 
 }
@@ -30,7 +30,7 @@ void elevatorSafetyFunction(){
 	switch (hardware_read_stop_signal())
 	{
 	case 1:
-	clearQueue(g_queue);
+	clearQueue(g_queue, g_queue_length);
 	clear_all_order_lights();
 	hardware_command_movement(HARDWARE_MOVEMENT_STOP);
 	hardware_command_stop_light(1);
@@ -42,7 +42,7 @@ void elevatorSafetyFunction(){
 		}
 		hardware_command_stop_light(0);
 		g_state=STANDING_STILL;
-		timer(3);
+		timer(30000);
 		hardware_command_door_open(0);
 		break;
 	case 0:
@@ -53,7 +53,7 @@ void elevatorSafetyFunction(){
 		while(hardware_read_obstruction_signal()==1){
 		}
 		
-		timer(3);
+		timer(30000);
 		hardware_command_door_open(0);
 		break;
 	default:
@@ -113,8 +113,8 @@ void elevatorInit(){
     }
 
 	hardware_command_floor_indicator_on(g_floor);
-	State=STANDING_STILL;
-	clearQueue(g_queue);
+	g_state=STANDING_STILL;
+	clearQueue(g_queue, g_queue_length);
 }
 
 
@@ -149,19 +149,19 @@ void lights(){
             /* Light for internal orders*/
             if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
                 hardware_command_order_light(f, HARDWARE_ORDER_INSIDE, 1);
-				addOrder(f, HARDWARE_ORDER_INSIDE);
+				//addOrder(f, HARDWARE_ORDER_INSIDE);
             }
 
             /* Lights for orders going up*/
             if(hardware_read_order(f, HARDWARE_ORDER_UP)){
                 hardware_command_order_light(f, HARDWARE_ORDER_UP, 1);
-				addOrder(f, HARDWARE_ORDER_UP);
+				//addOrder(f, HARDWARE_ORDER_UP);
             }
 
             /* Lights for orders going down */
             if(hardware_read_order(f, HARDWARE_ORDER_DOWN)){
                 hardware_command_order_light(f, HARDWARE_ORDER_DOWN, 1);
-				addOrder(f, HARDWARE_ORDER_DOWN);
+				//addOrder(f, HARDWARE_ORDER_DOWN);
             }
         }
 		
@@ -204,18 +204,21 @@ int main(){
 	{
 	case STANDING_STILL:
 		checkQueue(g_queue);
-		if (g_queue[i-1]>g_queue[i]){
+		for (int i=0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
+			if (g_queue[i-1].floor>g_queue[i].floor){
 			g_state=MOVE_UP;
-		}
-		if (g_queue[i-1]<g_queue[i]){
+			}
+			if (g_queue[i-1].floor<g_queue[i].floor){
 			g_state=MOVE_DOWN;
-		}
-		if(hardware_read_stop_signal()){
+			}
+			if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
 
-		}
-		break;
+			}
+			break;
 
+		}
+		
 	case DOOR_OPEN:
 		hardware_command_movement(HARDWARE_MOVEMENT_STOP);
 		floorReached(g_floor);

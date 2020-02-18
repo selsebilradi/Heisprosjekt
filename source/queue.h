@@ -7,6 +7,7 @@
 
 #include "hardware.h"
 #include "elevatorStateMachine.h"
+
 typedef struct{
 	double floor;
 	HardwareOrder orderType;
@@ -29,7 +30,7 @@ void popQueue(ElevatorOrder* queue, int length);
  * @param floor Floor number of the floor that all orders to shall be deleted
  */
 
-void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor);
+void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor);
 
  /**
  * @brief Sorts @p queue for efficient and correct elevator behaviourss
@@ -38,7 +39,7 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor);
  * @param length Length of @p queue 
  * @param state State of elevator
  */
-void sortQueue(ElevatorOrder* queue, int length, State state);
+//void sortQueue(ElevatorOrder* queue, int length, State state, int floor);
 
 /**
  * @brief Adds order to the queue if the order is not placed in queue before.

@@ -5,9 +5,11 @@
  *
  * 
  */
+
+#ifndef ELEVATORSTATEMACHINE_H
+#define ELEVATORSTATEMACHINE_H
 #include <stdio.h>
 #include "queue.h"
-#ifndef ELEVATORSTATEMACHINE_H
 
 /**
  * @brief Defines states used in ElevatorFSM
@@ -39,10 +41,11 @@ int checkQueue(ElevatorOrder * queue);
  * @brief Clears the queue for all orders and fills it with empty orders.
  * 
  * @param queue A queue of ElevatorOrder
+ * @param length Length of queue
  * 
  * @warning Will only be called when stop button is pushed.
  */
-void clearQueue(ElevatorOrder * queue);
+void clearQueue(ElevatorOrder * queue, int length);
 
 /**
  * @brief Sets the elevator to floor 1 as default start.

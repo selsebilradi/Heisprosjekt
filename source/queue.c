@@ -14,11 +14,8 @@ void popQueue(ElevatorOrder* queue, int length){
 	queue[length-1].orderType=NONE;
 }
 
-void deleteOrdersOnFloor(ElevatorOrder * queue, int length, double floor){
-	if (floor != (int)floor){
-		return;
-	}
-
+void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
+	
 	//lol hardkoding deluxe coming right up
 	int numberOfOrders = 0;
 	for (int i = 0; i < length; i++){
