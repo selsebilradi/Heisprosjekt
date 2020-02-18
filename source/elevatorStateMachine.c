@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "queue.h"
 
 State g_state;
 int g_queue_length;
@@ -18,7 +19,7 @@ void floorReached(int floor){
 	hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
 	hardware_command_order_light(floor, HARDWARE_ORDER_UP, 0);
 	hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
-	deleteOrdersOnFloor(g_queue, g_queue_length, floor);
+	//deleteOrdersOnFloor(g_queue, g_queue_length, floor);
 
 	timer(3000);
 	hardware_command_door_open(0);
@@ -188,6 +189,11 @@ static void clear_all_order_lights(){
         }
     }
 }
+static void sigint_handler(int sig){
+	(void)(sig);
+	printf("Terminating elevator\n");
+	exit(1);
+}
 
 int main(){
 	int error = hardware_init();
@@ -195,6 +201,7 @@ int main(){
         fprintf(stderr, "Unable to initialize hardware\n");
         exit(1);
     }
+	singal(SIGINT, sigint_handler);
 	elevatorInit();
 	while(1){
 
