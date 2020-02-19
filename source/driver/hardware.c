@@ -38,9 +38,9 @@ static int hardware_order_type_bit(HardwareOrder order_type){
         case HARDWARE_ORDER_DOWN:
             type_bit = 1;
             break;
-	default:
-	printf("Invalid input!!!!!!!!!!!\n");
-	break; //NB: Den casen her har vi lagt til..
+        //default:
+	        //printf("Invalid input!!!!!!!!!!!\n");
+	        //break; //NB: Den casen her har vi lagt til..
     }
 
     return type_bit;
