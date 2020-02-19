@@ -109,7 +109,7 @@ void clear_all_order_lights();
  * @param length length of the queue that you want to print.
  */
 
-void printQueue(ElevatorOrder* queue, int length);
+void printQueue();
 //static void sigint_handler(int sig);
 int main();
 

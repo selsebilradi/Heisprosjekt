@@ -74,7 +74,7 @@ void emptyQueue(){
 
 
 int checkQueue(ElevatorOrder * queue){
-	if ((queue[0].floor==-1)&&(queue[0].orderType==NONE)){
+	if (queue[0].floor==-1){
 		return 0;
 	}
 	else{
@@ -86,7 +86,7 @@ int checkQueue(ElevatorOrder * queue){
 void clearQueue(ElevatorOrder * queue, int length){
 	for (int i = 0; i < length; i++){
 		queue[i].floor=-1;
-		queue[i].orderType=NONE;
+		queue[i].orderType=HARDWARE_ORDER_INSIDE;
 	}
 }
 
@@ -152,8 +152,11 @@ void lights(){
             if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
                 hardware_command_order_light(f, HARDWARE_ORDER_INSIDE, 1);
 				addOrder(f, HARDWARE_ORDER_INSIDE);
-				printQueue(g_queue, g_queue_length);
-            }
+				printQueue();
+	
+					
+				}
+            
             
 
             /* Lights for orders going up*/
@@ -192,25 +195,23 @@ void clear_all_order_lights(){
         }
     }
 }
-void printQueue(ElevatorOrder* queue, int length){
+void printQueue(){
 		printf("\n{ ");
 
-	for (int i = 0; i < length; i++){
-		printf("{ %d, ", queue[i].floor);
-		if (queue[i].orderType == NONE){
-			printf("NONE");
-		}
-		else if (queue[i].orderType == HARDWARE_ORDER_INSIDE){
+	for (int i = 0; i < g_queue_length; i++){
+		printf("{ %d, ", g_queue[i].floor);
+	
+		if (g_queue[i].orderType == HARDWARE_ORDER_INSIDE){
 			printf("INSIDE");
 		}
-		else if (queue[i].orderType == HARDWARE_ORDER_UP){
+		else if (g_queue[i].orderType == HARDWARE_ORDER_UP){
 			printf("UP");
 		}
-		else if (queue[i].orderType == HARDWARE_ORDER_DOWN){
+		else if (g_queue[i].orderType == HARDWARE_ORDER_DOWN){
 			printf("DOWN");
 		}
 
-		if (i != length - 1){
+		if (i != g_queue_length - 1){
 		printf(" }, ");
 		}
 		else{
@@ -219,7 +220,6 @@ void printQueue(ElevatorOrder* queue, int length){
 	}
 	printf(" }\n\n");
 }
-
 
 int main(){
 	int error = hardware_init();
@@ -231,9 +231,7 @@ int main(){
 
 	elevatorInit();
 
-	for (int i=0; i<g_queue_length; i++){
-		printf("%d\n",g_queue[i].floor);
-	}
+	
 	while(1){
 
 		lights();
@@ -242,7 +240,7 @@ int main(){
 	{
 	case STANDING_STILL:
 		if (checkQueue(g_queue)==1){
-			printf("%d", g_queue[0].floor);
+			//printf("%d", g_queue[0].floor);
 
 			if (g_floor<g_queue[0].floor){
 			hardware_command_movement(HARDWARE_MOVEMENT_UP);

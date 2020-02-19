@@ -12,7 +12,7 @@ void popQueue(ElevatorOrder* queue, int length){
 		queue[i].orderType = queue[i+1].orderType;
 	}
 	queue[length-1].floor = -1;
-	queue[length-1].orderType=NONE;
+	queue[length-1].orderType=HARDWARE_ORDER_INSIDE;
 }
 
 void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
@@ -50,7 +50,7 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
 
 	for (int i = length-numberOfOrders; i < length; i++){
 		queue[i].floor=-1;
-		queue[i].orderType=NONE;
+		queue[i].orderType=HARDWARE_ORDER_INSIDE;
 	}
 
 	free(indexes);
@@ -67,7 +67,7 @@ void addOrder(int floor,HardwareOrder orderType){
 	
 	if (duplicate==0){
 		for (int j=0; j<g_queue_length; j++){
-				if(g_queue[j].floor==-1 && g_queue[j].orderType==NONE){
+				if(g_queue[j].floor==-1 && g_queue[j].orderType==HARDWARE_ORDER_INSIDE){
 					g_queue[j].floor=floor;
 					g_queue[j].orderType=orderType;
 					break;
