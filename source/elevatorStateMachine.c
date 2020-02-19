@@ -211,10 +211,10 @@ int main(){
 		hardware_command_door_open(0);
 		checkQueue(g_queue);
 		for (int i=0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
-			if (g_queue[i-1].floor>g_queue[i].floor){
+			if (g_queue[i+1].floor>g_queue[i].floor){
 			g_state=MOVE_UP;
 			}
-			if (g_queue[i-1].floor<g_queue[i].floor){
+			if (g_queue[i+1].floor<g_queue[i].floor){
 			g_state=MOVE_DOWN;
 			}
 			if(hardware_read_stop_signal()){
