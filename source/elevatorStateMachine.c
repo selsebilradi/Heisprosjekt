@@ -152,6 +152,7 @@ void lights(){
             if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
                 hardware_command_order_light(f, HARDWARE_ORDER_INSIDE, 1);
 				addOrder(f, HARDWARE_ORDER_INSIDE);
+				printQueue(g_queue, g_queue_length);
             }
             
 
@@ -190,6 +191,33 @@ void clear_all_order_lights(){
             hardware_command_order_light(f, type, 0);
         }
     }
+}
+void printQueue(ElevatorOrder* queue, int length){
+		printf("\n{ ");
+
+	for (int i = 0; i < length; i++){
+		printf("{ %d, ", queue[i].floor);
+		if (queue[i].orderType == NONE){
+			printf("NONE");
+		}
+		else if (queue[i].orderType == HARDWARE_ORDER_INSIDE){
+			printf("INSIDE");
+		}
+		else if (queue[i].orderType == HARDWARE_ORDER_UP){
+			printf("UP");
+		}
+		else if (queue[i].orderType == HARDWARE_ORDER_DOWN){
+			printf("DOWN");
+		}
+
+		if (i != length - 1){
+		printf(" }, ");
+		}
+		else{
+			printf(" }");
+		}
+	}
+	printf(" }\n\n");
 }
 
 

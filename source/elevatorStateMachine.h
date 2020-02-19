@@ -102,6 +102,14 @@ void clear_all_order_lights();
  * @return Returns 1 if elevator is at ordered floor, and 0 if not.
  */
 
+/**
+ * @brief Prints the queue in a nice format
+ * 
+ * @param queue the queue you want to print.
+ * @param length length of the queue that you want to print.
+ */
+
+void printQueue(ElevatorOrder* queue, int length);
 //static void sigint_handler(int sig);
 int main();
 
