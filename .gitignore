@@ -54,3 +54,8 @@ dkms.conf
 # Skisseblokka
 
 source/skisseblokk.c
+
+
+# Ferdig kompilert fil
+
+elevator
