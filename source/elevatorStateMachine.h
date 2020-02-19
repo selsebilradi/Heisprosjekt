@@ -25,7 +25,7 @@ typedef enum {
 extern State g_state;
 extern int g_queue_length;
 extern int g_floor;
-extern ElevatorOrder g_queue[6];
+extern ElevatorOrder g_queue[10];
 
 /**
  * @brief Functionality for when desired floor is reached
