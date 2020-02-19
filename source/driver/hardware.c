@@ -39,7 +39,7 @@ static int hardware_order_type_bit(HardwareOrder order_type){
             type_bit = 1;
             break;
 	default:
-	printf("Invalid input");
+	printf("Invalid input!!!!!!!!!!!\n");
 	break; //NB: Den casen her har vi lagt til..
     }
 
