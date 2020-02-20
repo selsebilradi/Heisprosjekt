@@ -276,16 +276,17 @@ int main(){
 		break;
 
 	case MOVE_UP:
+		//sortQueue();
 		if (destinationIsReached()){
 			g_state=DOOR_OPEN;
 		}
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
-
 		}
 		break;
 
 	case MOVE_DOWN:
+		//sortQueue();
 		if (destinationIsReached()){
 			g_state=DOOR_OPEN;
 		}
