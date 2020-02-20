@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "queue.h"
+#include <signal.h>
 
 State g_state;
 int g_queue_length=10;
@@ -220,6 +221,12 @@ void printQueue(){
 	}
 	printf(" }\n\n");
 }
+static void sigint_handler(int sig){
+    (void)(sig);
+    printf("Terminating elevator\n");
+    hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+    exit(0);
+}
 
 int main(){
 	int error = hardware_init();
@@ -227,7 +234,7 @@ int main(){
         fprintf(stderr, "Unable to initialize hardware\n");
         exit(1);
     }
-	//singal(SIGINT, sigint_handler);
+	signal(SIGINT, sigint_handler);
 
 	elevatorInit();
 
