@@ -247,7 +247,6 @@ int main(){
 	{
 	case STANDING_STILL:
 		if (checkQueue(g_queue)==1){
-			//printf("%d", g_queue[0].floor);
 
 			if (g_floor<g_queue[0].floor){
 			hardware_command_movement(HARDWARE_MOVEMENT_UP);
