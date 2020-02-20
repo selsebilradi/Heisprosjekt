@@ -13,15 +13,6 @@ typedef struct{
 	HardwareOrder orderType;
 } ElevatorOrder;
 
- /**
- * @brief Pops the first element of @p queue
- *
- * @param queue A queue of ElevatorOrders
- * @param length Length of @p queue 
- */
-
-void popQueue(ElevatorOrder* queue, int length);
-
 
  /**
  * @brief Delete all orders to floor @p floor
