@@ -111,8 +111,13 @@ void clear_all_order_lights();
 
 void printQueue();
 
+/**
+ * @brief Polls the buttons and checks for orders.
+ * 
+ *
+ */
 
-
+void checkAndAddOrders();
 //static void sigint_handler(int sig);
 int main();
 
