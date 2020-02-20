@@ -51,5 +51,12 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor);
  */
 void addOrder(int floor,HardwareOrder orderType);
 
+/**
+ * @brief Sorts the queue for optimal order execution.
+ *
+ * 
+ */
+void sortQueue();
+
 
 #endif
