@@ -6,8 +6,7 @@
 	->la til none i hardwareOrder
 - legg inn global variabel g-queue og g_floor og g_state i classy diagram
 - deklarere og definere sortQueue i eSM?
-- addOrder(floor, orderType, queue)
-	-> en funksjon som sjekka om d e duplikat i queue og evt legge i køen viss d ikkje e d.
 
+- Lag beire timerfunksjon? Mair nøyaktig?
 
--\!!! NB: VI har modifisert hardware.c....
+- Gjer det mogleg å stoppe mellom etasjar, og at hissen hugsar retning, så den ikkje trur den er i ein etasje.
