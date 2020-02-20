@@ -72,29 +72,31 @@ void elevatorSafetyFunction(); //kan ha et bedre navn
 void emptyQueue();
 
 /**
- * @brief Countdown for lights and door.
+ * @brief Waits a given time while polling buttons. The time is around 1.5 * 10^(-4) *@p mcseconds 
+ * 
+ * @param mcseconds The desired amout of seconds we wish to stall the elevator.
  * 
  */
-void timer(int seconds);
+void timer(int mcseconds);
 
 /**
  * @brief Checks if elevator is at floor in the first order.
  * 
- * @param seconds The desired amout of seconds we wish to stall the elevator.
+ * 
  */
-int destinationIsReached();
+int checkDestination();
 
 /**
  * @brief Sets the order lights and floor indicator lights based on where the elevator is.
  * 
  */
-void lights();
+void checkAndSetLights();
 
 /**
  * @brief Turns off all order lights.
  * 
  */
-void clear_all_order_lights();
+void clearAllOrderLights();
 
 /**
  * @brief The logic for the elevator.
@@ -118,8 +120,22 @@ void printQueue();
  */
 
 void checkAndAddOrders();
-//static void sigint_handler(int sig);
-int main();
+
+/**
+ * @brief Polls floor sensors and updates g_floor.
+ * 
+ *
+ */
+
+void updateCurrentFloor();
+
+/**
+ * @brief Finite state machine for the elevator. Contains logic for switching states.
+ * 
+ *
+ */
+
+int FSM();
 
 
 #endif
