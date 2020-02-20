@@ -252,7 +252,7 @@ int main(){
 			hardware_command_movement(HARDWARE_MOVEMENT_UP);
 			g_state=MOVE_UP;
 			}
-			if (g_queue[0].floor>g_floor){
+			else if (g_queue[0].floor>g_floor){
 			hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
 			g_state=MOVE_DOWN;
 		
@@ -277,9 +277,12 @@ int main(){
 
 	case MOVE_UP:
 		//sortQueue();
-		if (destinationIsReached()){
+		hardware_command_movement(HARDWARE_MOVEMENT_UP);
+
+		if(destinationIsReached()==1){
 			g_state=DOOR_OPEN;
 		}
+
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
 		}

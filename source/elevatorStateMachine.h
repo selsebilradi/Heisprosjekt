@@ -111,13 +111,9 @@ void clear_all_order_lights();
 
 void printQueue();
 
-/**
- * @brief Exits the program when terminated
- * 
- * 
- */
 
-static void sigint_handler(int sig);
+
+//static void sigint_handler(int sig);
 int main();
 
 
