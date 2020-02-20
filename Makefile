@@ -1,4 +1,4 @@
-SOURCES := elevatorStateMachine.c queue.c
+SOURCES := main.c elevatorStateMachine.c queue.c 
 
 SOURCE_DIR := source
 BUILD_DIR := build
