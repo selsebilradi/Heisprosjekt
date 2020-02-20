@@ -249,11 +249,9 @@ int main(){
 		if (checkQueue(g_queue)==1){
 
 			if (g_floor<g_queue[0].floor){
-			hardware_command_movement(HARDWARE_MOVEMENT_UP);
 			g_state=MOVE_UP;
 			}
 			else if (g_queue[0].floor>g_floor){
-			hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
 			g_state=MOVE_DOWN;
 		
 			}
@@ -290,6 +288,7 @@ int main(){
 
 	case MOVE_DOWN:
 		//sortQueue();
+		hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
 		if (destinationIsReached()){
 			g_state=DOOR_OPEN;
 		}
