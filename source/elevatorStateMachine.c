@@ -39,13 +39,14 @@ void elevatorSafetyFunction(){
 		while(hardware_read_stop_signal()){
 			if (hardware_read_floor_sensor(0)|| hardware_read_floor_sensor(1)||hardware_read_floor_sensor(2)|| hardware_read_floor_sensor(3)){
 				hardware_command_door_open(1);
+
 				g_state=DOOR_OPEN;
 			}
 		}
 		hardware_command_stop_light(0);
-		g_state=STANDING_STILL;
 		timer(30000);
 		hardware_command_door_open(0);
+		g_state=STANDING_STILL;
 		break;
 	case 0:
 		if (g_state!=DOOR_OPEN){
