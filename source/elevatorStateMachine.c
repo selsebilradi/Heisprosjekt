@@ -262,6 +262,7 @@ int FSM(){
 		checkAndSetLights();
 		checkAndAddOrders();
 		updateCurrentFloor();
+		sortQueue();
 
 	switch (g_state)
 	{
@@ -311,6 +312,14 @@ int FSM(){
 		
 		}
 
+		if (g_floor > g_queue[0].floor){
+			for (int i = 1; i < g_queue_length; i++){
+				if (g_floor == g_queue[i].floor){
+					g_state = DOOR_OPEN;
+				}
+			}
+		}
+
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
 			stopped = 1;
@@ -321,15 +330,26 @@ int FSM(){
 		stopped = 0;
 		sortQueue();
 		hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+
 		if (checkDestination()){
 			g_state=DOOR_OPEN;
 	
 		}
+
+		if (g_floor < g_queue[0].floor){
+			for (int i = 1; i < g_queue_length; i++){
+				if (g_floor == g_queue[i].floor){
+					g_state = DOOR_OPEN;
+				}
+			}
+		}
+
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
 			stopped = -1;
 
 		}
+
 		break;
 
 	default:
