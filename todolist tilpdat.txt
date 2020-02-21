@@ -10,3 +10,7 @@
 - Lag beire timerfunksjon? Mair nøyaktig?
 
 - Gjer det mogleg å stoppe mellom etasjar, og at hissen hugsar retning, så den ikkje trur den er i ein etasje.
+	-> mellomlagre en int stopped? -1 viss den e på vei ned og 1 viss den e på vei opp. Resette til 0 på en lur plass...
+
+
+
