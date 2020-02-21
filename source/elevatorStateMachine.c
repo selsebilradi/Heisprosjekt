@@ -312,6 +312,7 @@ int FSM(){
 		
 		}
 
+		//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
 		if (g_floor > g_queue[0].floor){
 			for (int i = 1; i < g_queue_length; i++){
 				if (g_floor == g_queue[i].floor){
@@ -336,6 +337,7 @@ int FSM(){
 	
 		}
 
+		//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
 		if (g_floor < g_queue[0].floor){
 			for (int i = 1; i < g_queue_length; i++){
 				if (g_floor == g_queue[i].floor){
