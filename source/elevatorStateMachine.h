@@ -72,12 +72,12 @@ void elevatorSafetyFunction(); //kan ha et bedre navn
 void emptyQueue();
 
 /**
- * @brief Waits a given time while polling buttons. The time is around 1.5 * 10^(-4) *@p mcseconds 
+ * @brief Waits a @p seconds seconds time while polling buttons.
  * 
- * @param mcseconds The desired amout of seconds we wish to stall the elevator.
+ * @param seconds The desired amout of seconds we wish to stall the elevator.
  * 
  */
-void timer(int mcseconds);
+void timer(int seconds);
 
 /**
  * @brief Checks if elevator is at floor in the first order.
