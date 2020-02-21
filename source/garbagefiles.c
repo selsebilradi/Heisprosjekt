@@ -115,3 +115,23 @@ void popQueue(ElevatorOrder* queue, int length){
 	queue[length-1].floor = -1;
 	queue[length-1].orderType=HARDWARE_ORDER_INSIDE;
 }
+
+
+
+void timer(int mcseconds){
+	int time=mcseconds;
+    while(1){
+        mcseconds--;
+		checkAndAddOrders();
+		checkAndSetLights();
+		usleep(1);
+        if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
+			timer(time);
+			break;
+		}
+		if (mcseconds==0){
+			break;
+		}
+
+    }
+}
