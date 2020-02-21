@@ -1,16 +1,13 @@
 - legg inn lokal?global? variabel g_queueLength i elevatorSM i klassediagrammet
 	->Clearqueue skal ta inn denne
 - må passe på at før kvar gong checkqueue blir kalt, så kalla vi sortqueue
-- trur vi greie oss uten hardwaremovement i order-structen
-	->har i alle fall tatt den ut
-	->la til none i hardwareOrder
 - legg inn global variabel g-queue og g_floor og g_state i classy diagram
 - deklarere og definere sortQueue i eSM?
 
-- Lag beire timerfunksjon? Mair nøyaktig?
+- husk å ta ut printsetninga før vi levera
+	-> Lurt med generelt anna korrekturlesing og..
 
-- Gjer det mogleg å stoppe mellom etasjar, og at hissen hugsar retning, så den ikkje trur den er i ein etasje.
-	-> mellomlagre en int stopped? -1 viss den e på vei ned og 1 viss den e på vei opp. Resette til 0 på en lur plass...
+- Drøft om løysinga med å sjekke fyrste moglege etasje eigentleg er ei god ei.
 
 
 
