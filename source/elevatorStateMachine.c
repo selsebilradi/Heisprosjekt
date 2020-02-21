@@ -4,10 +4,9 @@
 #include <stdio.h>
 #include "hardware.h"
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include "queue.h"
 #include <signal.h>
+#include <time.h>
 
 State g_state;
 int g_queue_length=10;
@@ -20,9 +19,8 @@ void floorReached(int floor){
 	hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
 	hardware_command_order_light(floor, HARDWARE_ORDER_UP, 0);
 	hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
-	deleteOrdersOnFloor(g_queue, g_queue_length, floor);
-
-	timer(20000);
+	deleteOrdersOnFloor(g_queue, g_queue_length, floor);	
+	timer(3);
 	hardware_command_door_open(0);
 
 }
@@ -43,7 +41,7 @@ void elevatorSafetyFunction(){
 			}
 		}
 		hardware_command_stop_light(0);
-		timer(20000);
+		timer(3);
 		hardware_command_door_open(0);
 		g_state=STANDING_STILL;
 		break;
@@ -57,7 +55,7 @@ void elevatorSafetyFunction(){
 			checkAndAddOrders();
 		}
 		
-		timer(20000);
+		timer(3);
 		hardware_command_door_open(0);
 		break;
 	default:
@@ -138,23 +136,22 @@ void checkAndAddOrders(){
 
 }
 
-void timer(int mcseconds){
-	int time=mcseconds;
-    while(1){
-        mcseconds--;
+
+void timer(int seconds){
+	time_t startTime   = time(0);
+	time_t currentTime = time(0);
+
+	while (currentTime-startTime < seconds){ //subtraksjonen her e grei fordi POSIX-standarden seie at time_t e i sekund, og linux e POSIX-compliant
 		checkAndAddOrders();
 		checkAndSetLights();
-		usleep(1);
         if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
-			timer(time);
+			timer(seconds);
 			break;
 		}
-		if (mcseconds==0){
-			break;
-		}
-
-    }
+		currentTime = time(0);
+	}
 }
+
 
 int checkDestination(){
 	if (hardware_read_floor_sensor(g_queue[0].floor)){
@@ -237,8 +234,9 @@ static void sigint_handler(int sig){
     hardware_command_movement(HARDWARE_MOVEMENT_STOP);
     exit(0);
 }
-	
+
 int FSM(){
+
 	int error = hardware_init();
     if(error != 0){
         fprintf(stderr, "Unable to initialize hardware\n");
@@ -248,8 +246,18 @@ int FSM(){
 	
 	elevatorInit();
 
-	
+	int stopped = 0;
+
+	time_t tid = time(0);
+	time_t temp;
 	while(1){
+		tid = time(0);
+		if (tid % 1 == 0){
+			if(temp != tid){
+				printQueue();
+			}
+			temp = tid;
+		}
 
 		checkAndSetLights();
 		checkAndAddOrders();
@@ -261,13 +269,22 @@ int FSM(){
 		if (checkQueue(g_queue)==1){
 
 			if (g_floor<g_queue[0].floor){
-			g_state=MOVE_UP;
+				g_state = MOVE_UP;
 			}
 
 			else if (g_queue[0].floor<g_floor){
-			g_state=MOVE_DOWN;
+				g_state = MOVE_DOWN;
 			}
 
+			else if ((g_queue[0].floor == g_floor) && (stopped == 0)){
+				g_state  = DOOR_OPEN;
+			}
+			else if ((g_queue[0].floor == g_floor) && (stopped == -1)){
+				g_state  = MOVE_UP;
+			}
+			else if ((g_queue[0].floor == g_floor) && (stopped == 1)){
+				g_state  = MOVE_DOWN;
+			}
 			if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
 			}
@@ -285,6 +302,7 @@ int FSM(){
 		break;
 
 	case MOVE_UP:
+		stopped = 0;
 		sortQueue();
 		hardware_command_movement(HARDWARE_MOVEMENT_UP);
 
@@ -295,10 +313,12 @@ int FSM(){
 
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
+			stopped = 1;
 		}
 		break;
 
 	case MOVE_DOWN:
+		stopped = 0;
 		sortQueue();
 		hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
 		if (checkDestination()){
@@ -307,6 +327,7 @@ int FSM(){
 		}
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
+			stopped = -1;
 
 		}
 		break;
