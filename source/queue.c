@@ -54,14 +54,10 @@ void addOrder(int floor,HardwareOrder orderType){
 	if (duplicate == 0){
 		for (int j = 0; j < g_queue_length; j++){
 			if(g_queue[j].floor == -1 && g_queue[j].orderType == HARDWARE_ORDER_INSIDE){
-                //kompenserer for ordre i samme etasje som den står i
                 if (g_state == DOOR_OPEN && floor == g_floor){
-                    //printf("SAMME ETASJE WOHO\n");
-                    //hardware_command_order_light(floor, orderType, 0);
-                    //hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
-                    //hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
                     break;
                 }
+
 				g_queue[j].floor     = floor;
 				g_queue[j].orderType = orderType;
 				break;
@@ -76,24 +72,25 @@ void sortQueue(){
     int OrdersInside = 0;
 
     for (int i=0; i<g_queue_length; i++){
-        if (g_queue[i].orderType==HARDWARE_ORDER_INSIDE && g_queue[i].floor!=-1){
+        if (g_queue[i].orderType == HARDWARE_ORDER_INSIDE && g_queue[i].floor != -1){
             OrdersInside++;
         }
-        else if(g_queue[i].orderType==HARDWARE_ORDER_UP){
+        else if(g_queue[i].orderType == HARDWARE_ORDER_UP){
             OrdersUp++;
 
         }
-        else if(g_queue[i].orderType==HARDWARE_ORDER_DOWN){
+        else if(g_queue[i].orderType == HARDWARE_ORDER_DOWN){
             OrdersDown++;
         }
     }
+
     switch (g_state)
     {
     case MOVE_UP:   ;
-    {//Lagar eige scope her, slik at me slepp trøbbel med redefinition av variable
-        int numberOfRelevantOrders = OrdersUp + OrdersInside;
+    {
+        int numberOfRelevantOrders     = OrdersUp + OrdersInside;
         ElevatorOrder * relevantOrders = (ElevatorOrder *) malloc(numberOfRelevantOrders * sizeof(ElevatorOrder));
-        ElevatorOrder * downOrders = (ElevatorOrder *) malloc((OrdersDown)*sizeof(ElevatorOrder));
+        ElevatorOrder * downOrders     = (ElevatorOrder *) malloc((OrdersDown)*sizeof(ElevatorOrder));
         int relIndex  = 0;
         int downIndex = 0;
 
@@ -109,9 +106,10 @@ void sortQueue(){
                 downIndex++;
             }
         }
-        //bubblesort
+       
         int swapped, count;
         ElevatorOrder temp;
+
         while(1){
             if (numberOfRelevantOrders==0){
                 break;
@@ -163,28 +161,27 @@ void sortQueue(){
         int queueIndex = 0;
         int fromIndex  = numberOfRelevantOrders;
         for (int i =0; i<numberOfRelevantOrders; i++){
-            if (relevantOrders[i].floor>=g_floor){
+            if (relevantOrders[i].floor >= g_floor){
                 fromIndex = i;
                 break;
             }
         }
-        for (int i = fromIndex; i<numberOfRelevantOrders; i++){
+        for (int i = fromIndex; i < numberOfRelevantOrders; i++){
             g_queue[queueIndex].floor     = relevantOrders[i].floor;
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
         }
         
-        for(int i=0; i<downIndex; i++){
+        for(int i=0; i < downIndex; i++){
             g_queue[queueIndex].floor     = downOrders[i].floor;
             g_queue[queueIndex].orderType = downOrders[i].orderType;
             queueIndex++;
         }
 
-        for(int i=0; i<fromIndex; i++){
+        for(int i=0; i < fromIndex; i++){
             g_queue[queueIndex].floor     = relevantOrders[i].floor;
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
-
         }
         
         for (int i = 0; i < g_queue_length-OrdersInside-OrdersUp-OrdersDown; i++){
@@ -199,33 +196,35 @@ void sortQueue(){
     }
         break;
     case MOVE_DOWN:
-    {//Lagar eige scope her, slik at me slepp trøbbel med redefinition av variable
-        int numberOfRelevantOrders = OrdersDown + OrdersInside;
-        ElevatorOrder* relevantOrders=(ElevatorOrder*)malloc(numberOfRelevantOrders * sizeof(ElevatorOrder));
-        ElevatorOrder* upOrders=(ElevatorOrder*)malloc((OrdersUp)*sizeof(ElevatorOrder));
+    {
+        int numberOfRelevantOrders    = OrdersDown + OrdersInside;
+        ElevatorOrder* relevantOrders = (ElevatorOrder*)malloc(numberOfRelevantOrders * sizeof(ElevatorOrder));
+        ElevatorOrder* upOrders       = (ElevatorOrder*)malloc((OrdersUp)*sizeof(ElevatorOrder));
 
         int relIndex = 0;
         int upIndex  = 0;
 
         for (int j = 0; j < g_queue_length; j++){
-            if (g_queue[j].orderType != HARDWARE_ORDER_UP && g_queue[j].floor!=-1){
+            if (g_queue[j].orderType != HARDWARE_ORDER_UP && g_queue[j].floor != -1){
                 relevantOrders[relIndex].floor     = g_queue[j].floor;
                 relevantOrders[relIndex].orderType = g_queue[j].orderType;
                 relIndex++;
             }
+
             else if(g_queue[j].orderType == HARDWARE_ORDER_UP){
                 upOrders[upIndex].floor     = g_queue[j].floor;
                 upOrders[upIndex].orderType = g_queue[j].orderType;
                 upIndex++;
             }
         }
-        //bubblesort
+        
         int swapped, count;
         ElevatorOrder temp;
         while(1){
             if (numberOfRelevantOrders==0){
                 break;
             }
+             
             swapped = 0;
             for (count=0; count<numberOfRelevantOrders-1;count++){
                 if (relevantOrders[count].floor < relevantOrders[count+1].floor){
@@ -241,7 +240,8 @@ void sortQueue(){
                     swapped = 1;
                 }
             }
-            if (swapped==0){
+
+            if (swapped == 0){
                 break;
             }
         }
@@ -265,7 +265,7 @@ void sortQueue(){
                     swapped = 1;
                 }
             }
-            if (swapped==0){
+            if (swapped == 0){
                 break;
             }
         }
@@ -273,24 +273,24 @@ void sortQueue(){
         int queueIndex = 0;
         int fromIndex  = numberOfRelevantOrders;
         for (int i =0; i<numberOfRelevantOrders; i++){
-            if (relevantOrders[i].floor<=g_floor){
+            if (relevantOrders[i].floor <= g_floor){
                 fromIndex = i;
                 break;
             }
         }
-        for (int i =fromIndex; i<numberOfRelevantOrders; i++){
+        for (int i =fromIndex; i < numberOfRelevantOrders; i++){
             g_queue[queueIndex].floor     = relevantOrders[i].floor;
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
         }
 
-        for(int i=0; i<upIndex; i++){
+        for(int i=0; i < upIndex; i++){
             g_queue[queueIndex].floor     = upOrders[i].floor;
             g_queue[queueIndex].orderType = upOrders[i].orderType;
             queueIndex++;
         }
         
-        for(int i=0; i<fromIndex; i++){
+        for(int i=0; i < fromIndex; i++){
             g_queue[queueIndex].floor     = relevantOrders[i].floor;
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
@@ -302,7 +302,6 @@ void sortQueue(){
             g_queue[queueIndex].orderType = HARDWARE_ORDER_INSIDE;
             queueIndex++;
         }
-
 
         free(relevantOrders);
         free(upOrders);

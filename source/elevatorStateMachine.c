@@ -34,7 +34,7 @@ void elevatorSafetyFunction(){
 	hardware_command_movement(HARDWARE_MOVEMENT_STOP);
 	hardware_command_stop_light(1);
 		while(hardware_read_stop_signal()){
-			if (hardware_read_floor_sensor(0)|| hardware_read_floor_sensor(1)||hardware_read_floor_sensor(2)|| hardware_read_floor_sensor(3)){
+			if (hardware_read_floor_sensor(0) || hardware_read_floor_sensor(1) || hardware_read_floor_sensor(2) || hardware_read_floor_sensor(3)){
 				hardware_command_door_open(1);
 
 				g_state=DOOR_OPEN;
@@ -46,11 +46,11 @@ void elevatorSafetyFunction(){
 		g_state=STANDING_STILL;
 		break;
 	case 0:
-		if (g_state!=DOOR_OPEN){
+		if (g_state != DOOR_OPEN){
 			break;
 		}
 		hardware_command_door_open(1);
-		while(hardware_read_obstruction_signal()==1){
+		while(hardware_read_obstruction_signal() == 1){
 			checkAndSetLights();
 			checkAndAddOrders();
 		}
@@ -64,14 +64,14 @@ void elevatorSafetyFunction(){
 }
 
 void emptyQueue(){
-	if (checkQueue(g_queue)==0){
+	if (checkQueue(g_queue) == 0){
 		g_state = STANDING_STILL;
 		hardware_command_door_open(0);
 	}
 }
 
 int checkQueue(ElevatorOrder * queue){
-	if (queue[0].floor==-1){
+	if (queue[0].floor == -1){
 		return 0;
 	}
 	else{
@@ -81,22 +81,22 @@ int checkQueue(ElevatorOrder * queue){
 
 void clearQueue(ElevatorOrder * queue, int length){
 	for (int i = 0; i < length; i++){
-		queue[i].floor=-1;
-		queue[i].orderType=HARDWARE_ORDER_INSIDE;
+		queue[i].floor     = -1;
+		queue[i].orderType = HARDWARE_ORDER_INSIDE;
 	}
 }
 
 void elevatorInit(){
 	
-	g_floor=0;
+	g_floor = 0;
 	hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
 	while (1){
-		if (hardware_read_floor_sensor(g_floor)==1){
+		if (hardware_read_floor_sensor(g_floor) == 1){
 			hardware_command_movement(HARDWARE_MOVEMENT_STOP);
 			break;
 		}
-		
 	}
+
 	HardwareOrder order_types[3] = {
         HARDWARE_ORDER_UP,
         HARDWARE_ORDER_INSIDE,
@@ -111,7 +111,7 @@ void elevatorInit(){
     }
 
 	hardware_command_floor_indicator_on(g_floor);
-	g_state=STANDING_STILL;
+	g_state = STANDING_STILL;
 	clearQueue(g_queue, g_queue_length);
 }
 
@@ -119,7 +119,7 @@ void checkAndAddOrders(){
 	for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
         if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
 			addOrder(f, HARDWARE_ORDER_INSIDE);
-			}
+		}
 
         if(hardware_read_order(f, HARDWARE_ORDER_UP)){	
 			addOrder(f, HARDWARE_ORDER_UP);
@@ -139,7 +139,7 @@ void timer(int seconds){
 	while (currentTime-startTime < seconds){ //subtraksjonen her e grei fordi POSIX-standarden seie at time_t e i sekund, og linux e POSIX-compliant
 		checkAndSetLights();
 		checkAndAddOrders();
-        if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
+        if (hardware_read_obstruction_signal() == 1 || hardware_read_stop_signal() == 1){
 			elevatorSafetyFunction();
 			break;
 		}
@@ -156,6 +156,7 @@ int checkDestination(){
 	if (hardware_read_floor_sensor(g_queue[0].floor)){
 		return 1;
 	}
+	
 	else {
 		return 0;
 	}
@@ -174,7 +175,8 @@ void checkAndSetLights(){
         if(hardware_read_order(f, HARDWARE_ORDER_DOWN)){
             hardware_command_order_light(f, HARDWARE_ORDER_DOWN, 1);
         }
-		if(((f == g_floor) && (g_state == DOOR_OPEN))){
+
+		if((f == g_floor) && (g_state == DOOR_OPEN)){
 			hardware_command_order_light(f, HARDWARE_ORDER_INSIDE, 0);
 			hardware_command_order_light(f, HARDWARE_ORDER_DOWN, 0);
 			hardware_command_order_light(f, HARDWARE_ORDER_UP, 0);
@@ -183,10 +185,10 @@ void checkAndSetLights(){
 }
 
 void updateCurrentFloor(){
-	for (int i=0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
+	for (int i = 0; i<HARDWARE_NUMBER_OF_FLOORS; i++){
 		if (hardware_read_floor_sensor(i)){
 			hardware_command_floor_indicator_on(i);
-			g_floor=i;
+			g_floor = i;
 		}
 	}
 }
@@ -206,31 +208,6 @@ void clearAllOrderLights(){
     }
 }
 
-void printQueue(){
-		printf("\n{ ");
-
-	for (int i = 0; i < g_queue_length; i++){
-		printf("{ %d, ", g_queue[i].floor);
-	
-		if (g_queue[i].orderType == HARDWARE_ORDER_INSIDE){
-			printf("INSIDE");
-		}
-		else if (g_queue[i].orderType == HARDWARE_ORDER_UP){
-			printf("UP");
-		}
-		else if (g_queue[i].orderType == HARDWARE_ORDER_DOWN){
-			printf("DOWN");
-		}
-
-		if (i != g_queue_length - 1){
-		printf(" }, ");
-		}
-		else{
-			printf(" }");
-		}
-	}
-	printf(" }\n\n");
-}
 
 static void sigint_handler(int sig){
     (void)(sig);
@@ -246,128 +223,96 @@ int FSM(){
         fprintf(stderr, "Unable to initialize hardware\n");
         exit(1);
     }
+
 	signal(SIGINT, sigint_handler);
 	
 	elevatorInit();
 
 	int stopped = 0;
 
-	time_t tid = time(0);
-	time_t temp;
 	while(1){
-		tid = time(0);
-		if (tid % 1 == 0){
-			if(temp != tid){
-				printQueue();
-			}
-			temp = tid;
-		}
-
+		
 		checkAndSetLights();
 		checkAndAddOrders();
 		updateCurrentFloor();
 		sortQueue();
-	
 
 	switch (g_state)
 	{
-	case STANDING_STILL:
-		if(hardware_read_stop_signal()){
-			elevatorSafetyFunction();
-		}
-
-		if (checkQueue(g_queue)==1){
-
-
-			if (g_floor<g_queue[0].floor){
-				g_state = MOVE_UP;
+		case STANDING_STILL:
+			if(hardware_read_stop_signal()){
+				elevatorSafetyFunction();
 			}
 
-			else if (g_queue[0].floor<g_floor){
-				g_state = MOVE_DOWN;
-			}
+			if (checkQueue(g_queue) == 1){
 
-			else if ((g_queue[0].floor == g_floor) && (stopped == 0)){
-				g_state  = DOOR_OPEN;
-				
-			}
-			else if ((g_queue[0].floor == g_floor) && (stopped == -1)){
-				g_state  = MOVE_UP;
-				
-			}
-			else if ((g_queue[0].floor == g_floor) && (stopped == 1
-			)){
-				g_state  = MOVE_DOWN;
-				
-			}	
-		}
-		break;
-		
-	case DOOR_OPEN:
-		hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-		floorReached(g_floor);
-		if(hardware_read_stop_signal()||hardware_read_obstruction_signal()){
-			elevatorSafetyFunction();
-
-		}
-		g_state=STANDING_STILL;
-		break;
-
-	case MOVE_UP:
-		stopped = 0;
-		sortQueue();
-		hardware_command_movement(HARDWARE_MOVEMENT_UP);
-
-		if(checkDestination()==1){
-			g_state=DOOR_OPEN;
-		
-		}
-
-		/*//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
-		if (g_floor > g_queue[0].floor){
-			for (int i = 1; i < g_queue_length; i++){
-				if (g_floor == g_queue[i].floor){
-					g_state = DOOR_OPEN;
+				if (g_floor < g_queue[0].floor){
+					g_state = MOVE_UP;
 				}
-			}
-		}*/
 
-		if(hardware_read_stop_signal()){
-			elevatorSafetyFunction();
-			stopped = 1;
-		}
-		break;
-
-	case MOVE_DOWN:
-		stopped = 0;
-		sortQueue();
-		hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
-
-		if (checkDestination()){
-			g_state=DOOR_OPEN;
-	
-		}
-
-		/*//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
-		if (g_floor < g_queue[0].floor){
-			for (int i = 1; i < g_queue_length; i++){
-				if (g_floor == g_queue[i].floor){
-					g_state = DOOR_OPEN;
+				else if (g_queue[0].floor < g_floor){
+					g_state = MOVE_DOWN;
 				}
+
+				else if ((g_queue[0].floor == g_floor) && (stopped == 0)){
+					g_state  = DOOR_OPEN;
+				}
+
+				else if ((g_queue[0].floor == g_floor) && (stopped == -1)){
+					g_state  = MOVE_UP;
+				}
+
+				else if ((g_queue[0].floor == g_floor) && (stopped == 1)){
+					g_state  = MOVE_DOWN;	
+				}	
 			}
-		}*/
+			break;
+			
+		case DOOR_OPEN:
+			hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+			floorReached(g_floor);
+			if(hardware_read_stop_signal()||hardware_read_obstruction_signal()){
+				elevatorSafetyFunction();
 
-		if(hardware_read_stop_signal()){
-			elevatorSafetyFunction();
-			stopped = -1;
+			}
+			g_state = STANDING_STILL;
+			break;
 
+		case MOVE_UP:
+			stopped = 0;
+			sortQueue();
+			hardware_command_movement(HARDWARE_MOVEMENT_UP);
+
+			if(checkDestination() == 1){
+				g_state = DOOR_OPEN;
+			}
+
+			if(hardware_read_stop_signal()){
+				elevatorSafetyFunction();
+				stopped = 1;
+			}
+
+			break;
+
+		case MOVE_DOWN:
+			stopped = 0;
+			sortQueue();
+			hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+
+			if (checkDestination()){
+				g_state = DOOR_OPEN;
+			}
+
+			if(hardware_read_stop_signal()){
+				elevatorSafetyFunction();
+				stopped = -1;
+			}
+
+			break;
+
+		default:
+			break;
 		}
-
-		break;
-
-	default:
-		break;
-	}
 	}
 }
 
