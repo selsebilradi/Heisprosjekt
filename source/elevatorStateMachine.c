@@ -117,23 +117,18 @@ void elevatorInit(){
 
 void checkAndAddOrders(){
 	for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
-            if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
-				addOrder(f, HARDWARE_ORDER_INSIDE);
-				sortQueue();
-				}
+        if(hardware_read_order(f, HARDWARE_ORDER_INSIDE)){
+			addOrder(f, HARDWARE_ORDER_INSIDE);
+			}
 
-            if(hardware_read_order(f, HARDWARE_ORDER_UP)){
-				addOrder(f, HARDWARE_ORDER_UP);
-				sortQueue();
-            }
-
-            if(hardware_read_order(f, HARDWARE_ORDER_DOWN)){
-				addOrder(f, HARDWARE_ORDER_DOWN);
-				sortQueue();
-            }
+        if(hardware_read_order(f, HARDWARE_ORDER_UP)){	
+			addOrder(f, HARDWARE_ORDER_UP);
         }
-		
 
+        if(hardware_read_order(f, HARDWARE_ORDER_DOWN)){
+			addOrder(f, HARDWARE_ORDER_DOWN);
+        }
+    }
 }
 
 
@@ -145,7 +140,7 @@ void timer(int seconds){
 		checkAndAddOrders();
 		checkAndSetLights();
         if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
-			timer(seconds);
+			elevatorSafetyFunction();
 			break;
 		}
 		currentTime = time(0);
@@ -263,11 +258,17 @@ int FSM(){
 		checkAndAddOrders();
 		updateCurrentFloor();
 		sortQueue();
+	
 
 	switch (g_state)
 	{
 	case STANDING_STILL:
+		if(hardware_read_stop_signal()){
+			elevatorSafetyFunction();
+		}
+
 		if (checkQueue(g_queue)==1){
+
 
 			if (g_floor<g_queue[0].floor){
 				g_state = MOVE_UP;
@@ -279,17 +280,17 @@ int FSM(){
 
 			else if ((g_queue[0].floor == g_floor) && (stopped == 0)){
 				g_state  = DOOR_OPEN;
+				
 			}
 			else if ((g_queue[0].floor == g_floor) && (stopped == -1)){
 				g_state  = MOVE_UP;
+				
 			}
 			else if ((g_queue[0].floor == g_floor) && (stopped == 1)){
 				g_state  = MOVE_DOWN;
-			}
-			if(hardware_read_stop_signal()){
-			elevatorSafetyFunction();
-			}
-	}
+				
+			}	
+		}
 		break;
 		
 	case DOOR_OPEN:
@@ -312,14 +313,14 @@ int FSM(){
 		
 		}
 
-		//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
+		/*//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
 		if (g_floor > g_queue[0].floor){
 			for (int i = 1; i < g_queue_length; i++){
 				if (g_floor == g_queue[i].floor){
 					g_state = DOOR_OPEN;
 				}
 			}
-		}
+		}*/
 
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();
@@ -337,14 +338,14 @@ int FSM(){
 	
 		}
 
-		//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
+		/*//For å stoppe på fyrste moglege etasje om køsorteringa har svikta
 		if (g_floor < g_queue[0].floor){
 			for (int i = 1; i < g_queue_length; i++){
 				if (g_floor == g_queue[i].floor){
 					g_state = DOOR_OPEN;
 				}
 			}
-		}
+		}*/
 
 		if(hardware_read_stop_signal()){
 			elevatorSafetyFunction();

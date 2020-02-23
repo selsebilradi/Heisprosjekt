@@ -54,11 +54,17 @@ void addOrder(int floor,HardwareOrder orderType){
 	if (duplicate==0){
 		for (int j=0; j<g_queue_length; j++){
 			if(g_queue[j].floor==-1 && g_queue[j].orderType==HARDWARE_ORDER_INSIDE){
+                //kompenserer for ordre i samme etasje som den står i
+                if (g_state == DOOR_OPEN && floor == g_floor){
+                    hardware_command_order_light(floor, HARDWARE_ORDER_UP, 0);
+                    hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
+                    hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
+                    break;
+                }
 				g_queue[j].floor     = floor;
 				g_queue[j].orderType = orderType;
 				break;
 			}
-	
 		}
 	}
 }
@@ -128,34 +134,58 @@ void sortQueue(){
                 break;
             }
         }
+        while(1){
+            if (OrdersDown==0){
+                break;
+            }
+            swapped = 0;
+            for (count=0; count<OrdersDown-1;count++){
+                if (relevantOrders[count].floor > relevantOrders[count+1].floor){
+                    temp.floor     = relevantOrders[count].floor;
+                    temp.orderType = relevantOrders[count].orderType;
+
+                    relevantOrders[count].floor     = relevantOrders[count+1].floor;
+                    relevantOrders[count].orderType = relevantOrders[count+1].orderType;
+
+                    relevantOrders[count+1].floor     = temp.floor;
+                    relevantOrders[count+1].orderType = temp.orderType;
+
+                    swapped = 1;
+                }
+            }
+            if (swapped==0){
+                break;
+            }
+        }
 
         
         int queueIndex = 0;
-        int fromIndex  = 0;
-        for (int i =0; i<+numberOfRelevantOrders; i++){
+        int fromIndex  = numberOfRelevantOrders;
+        for (int i =0; i<numberOfRelevantOrders; i++){
             if (relevantOrders[i].floor>=g_floor){
                 fromIndex = i;
                 break;
             }
         }
-        for (int i =fromIndex; i<numberOfRelevantOrders; i++){
+        for (int i = fromIndex; i<numberOfRelevantOrders; i++){
             g_queue[queueIndex].floor     = relevantOrders[i].floor;
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
         }
         
-        for(int i=0; i<fromIndex; i++){
-            g_queue[queueIndex].floor     = relevantOrders[i].floor;
-            g_queue[queueIndex].orderType = relevantOrders[i].orderType;
-            queueIndex++;
-
-        }
         for(int i=0; i<downIndex; i++){
             g_queue[queueIndex].floor     = downOrders[i].floor;
             g_queue[queueIndex].orderType = downOrders[i].orderType;
             queueIndex++;
         }
 
+        for(int i=0; i<fromIndex; i++){
+            g_queue[queueIndex].floor     = relevantOrders[i].floor;
+            g_queue[queueIndex].orderType = relevantOrders[i].orderType;
+            queueIndex++;
+
+        }
+        
         for (int i = 0; i < g_queue_length-OrdersInside-OrdersUp-OrdersDown; i++){
             g_queue[queueIndex].floor     = -1;
             g_queue[queueIndex].orderType = HARDWARE_ORDER_INSIDE;
@@ -215,7 +245,7 @@ void sortQueue(){
             }
         }
         int queueIndex = 0;
-        int fromIndex  = 0;
+        int fromIndex  = numberOfRelevantOrders;
         for (int i =0; i<numberOfRelevantOrders; i++){
             if (relevantOrders[i].floor<=g_floor){
                 fromIndex = i;
@@ -227,17 +257,18 @@ void sortQueue(){
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
         }
+
+        for(int i=0; i<upIndex; i++){
+            g_queue[queueIndex].floor     = upOrders[i].floor;
+            g_queue[queueIndex].orderType = upOrders[i].orderType;
+            queueIndex++;
+        }
         
         for(int i=0; i<fromIndex; i++){
             g_queue[queueIndex].floor     = relevantOrders[i].floor;
             g_queue[queueIndex].orderType = relevantOrders[i].orderType;
             queueIndex++;
 
-        }
-        for(int i=0; i<upIndex; i++){
-            g_queue[queueIndex].floor     = upOrders[i].floor;
-            g_queue[queueIndex].orderType = upOrders[i].orderType;
-            queueIndex++;
         }
 
         for (int i = 0; i < g_queue_length-OrdersInside-OrdersUp-OrdersDown; i++){
