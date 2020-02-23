@@ -137,10 +137,14 @@ void timer(int seconds){
 	time_t currentTime = time(0);
 
 	while (currentTime-startTime < seconds){ //subtraksjonen her e grei fordi POSIX-standarden seie at time_t e i sekund, og linux e POSIX-compliant
-		checkAndAddOrders();
 		checkAndSetLights();
+		checkAndAddOrders();
         if (hardware_read_obstruction_signal()==1|| hardware_read_stop_signal()==1){
 			elevatorSafetyFunction();
+			break;
+		}
+		if((hardware_read_order(g_floor, HARDWARE_ORDER_UP) || hardware_read_order(g_floor, HARDWARE_ORDER_DOWN) || hardware_read_order(g_floor, HARDWARE_ORDER_INSIDE)) && (g_state == DOOR_OPEN)){
+			timer(3);
 			break;
 		}
 		currentTime = time(0);
@@ -170,6 +174,11 @@ void checkAndSetLights(){
         if(hardware_read_order(f, HARDWARE_ORDER_DOWN)){
             hardware_command_order_light(f, HARDWARE_ORDER_DOWN, 1);
         }
+		if(((f == g_floor) && (g_state == DOOR_OPEN))){
+			hardware_command_order_light(f, HARDWARE_ORDER_INSIDE, 0);
+			hardware_command_order_light(f, HARDWARE_ORDER_DOWN, 0);
+			hardware_command_order_light(f, HARDWARE_ORDER_UP, 0);
+		}
     }
 }
 
@@ -286,7 +295,8 @@ int FSM(){
 				g_state  = MOVE_UP;
 				
 			}
-			else if ((g_queue[0].floor == g_floor) && (stopped == 1)){
+			else if ((g_queue[0].floor == g_floor) && (stopped == 1
+			)){
 				g_state  = MOVE_DOWN;
 				
 			}	

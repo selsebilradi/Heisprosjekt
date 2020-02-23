@@ -19,7 +19,7 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
 	int* indexes = malloc(numberOfOrders*sizeof(int));
 
 
-	int offset=0;
+	int offset = 0;
 
 	for (int i = 0; i < length; i++){
 		if (queue[i].floor == floor){
@@ -44,21 +44,22 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
 }
 
 void addOrder(int floor,HardwareOrder orderType){
-	int duplicate=0;
-	for (int i=0; i<g_queue_length; i++){
-		if (g_queue[i].floor==floor && g_queue[i].orderType== orderType){
+	int duplicate = 0;
+	for (int i = 0; i < g_queue_length; i++){
+		if (g_queue[i].floor == floor && g_queue[i].orderType == orderType){
 			duplicate = 1;	
 		}	
 	}
 
-	if (duplicate==0){
-		for (int j=0; j<g_queue_length; j++){
-			if(g_queue[j].floor==-1 && g_queue[j].orderType==HARDWARE_ORDER_INSIDE){
+	if (duplicate == 0){
+		for (int j = 0; j < g_queue_length; j++){
+			if(g_queue[j].floor == -1 && g_queue[j].orderType == HARDWARE_ORDER_INSIDE){
                 //kompenserer for ordre i samme etasje som den står i
                 if (g_state == DOOR_OPEN && floor == g_floor){
-                    hardware_command_order_light(floor, HARDWARE_ORDER_UP, 0);
-                    hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
-                    hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
+                    //printf("SAMME ETASJE WOHO\n");
+                    //hardware_command_order_light(floor, orderType, 0);
+                    //hardware_command_order_light(floor, HARDWARE_ORDER_INSIDE, 0);
+                    //hardware_command_order_light(floor, HARDWARE_ORDER_DOWN, 0);
                     break;
                 }
 				g_queue[j].floor     = floor;
@@ -140,15 +141,15 @@ void sortQueue(){
             }
             swapped = 0;
             for (count=0; count<OrdersDown-1;count++){
-                if (relevantOrders[count].floor > relevantOrders[count+1].floor){
-                    temp.floor     = relevantOrders[count].floor;
-                    temp.orderType = relevantOrders[count].orderType;
+                if (downOrders[count].floor < downOrders[count+1].floor){
+                    temp.floor     = downOrders[count].floor;
+                    temp.orderType = downOrders[count].orderType;
 
-                    relevantOrders[count].floor     = relevantOrders[count+1].floor;
-                    relevantOrders[count].orderType = relevantOrders[count+1].orderType;
+                    downOrders[count].floor     = downOrders[count+1].floor;
+                    downOrders[count].orderType = downOrders[count+1].orderType;
 
-                    relevantOrders[count+1].floor     = temp.floor;
-                    relevantOrders[count+1].orderType = temp.orderType;
+                    downOrders[count+1].floor     = temp.floor;
+                    downOrders[count+1].orderType = temp.orderType;
 
                     swapped = 1;
                 }
@@ -244,6 +245,31 @@ void sortQueue(){
                 break;
             }
         }
+
+        while(1){
+            if (OrdersUp == 0){
+                break;
+            }
+            swapped = 0;
+            for (count=0; count<OrdersUp-1;count++){
+                if (upOrders[count].floor > upOrders[count+1].floor){
+                    temp.floor     = upOrders[count].floor;
+                    temp.orderType = upOrders[count].orderType;
+
+                    upOrders[count].floor     = upOrders[count+1].floor;
+                    upOrders[count].orderType = upOrders[count+1].orderType;
+
+                    upOrders[count+1].floor     = temp.floor;
+                    upOrders[count+1].orderType = temp.orderType;
+
+                    swapped = 1;
+                }
+            }
+            if (swapped==0){
+                break;
+            }
+        }
+
         int queueIndex = 0;
         int fromIndex  = numberOfRelevantOrders;
         for (int i =0; i<numberOfRelevantOrders; i++){
