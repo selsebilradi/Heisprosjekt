@@ -41,7 +41,7 @@ void floorReached(int floor);
  * 
  * @return Returns 0 if queue is empty. Returns 1 otherwise.
  */
-int checkQueue(ElevatorOrder * queue);
+int checkQueue();
 
 /**
  * @brief Clears the queue for all orders and fills it with empty orders.
@@ -51,7 +51,7 @@ int checkQueue(ElevatorOrder * queue);
  * 
  * @warning Will only be called when stop button is pushed.
  */
-void clearQueue(ElevatorOrder * queue, int length);
+void clearQueue();
 
 /**
  * @brief Sets the elevator to floor 1 as default start.
