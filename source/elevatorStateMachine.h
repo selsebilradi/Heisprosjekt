@@ -65,11 +65,6 @@ void elevatorInit();
  * 
  */
 void elevatorSafetyFunction(); 
-/**
- * @brief Changes the state of the elevator when queue is empty.
- * 
- */
-void emptyQueue();
 
 /**
  * @brief Waits a @p seconds seconds time while polling buttons.

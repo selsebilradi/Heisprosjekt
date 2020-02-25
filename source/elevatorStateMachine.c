@@ -66,12 +66,6 @@ void elevatorSafetyFunction(){
 	}
 }
 
-void emptyQueue(){
-	if (checkQueue() == 0){
-		g_state = STANDING_STILL;
-		hardware_command_door_open(0);
-	}
-}
 
 int checkQueue(){
 	if (g_queue[0].floor == -1){
