@@ -34,24 +34,6 @@ extern ElevatorOrder g_queue[10];
  */
 void floorReached(int floor);
 
-/**
- * @brief Checks if queue is empty.
- * 
- * @param queue A queue of ElevatorOrder
- * 
- * @return Returns 0 if queue is empty. Returns 1 otherwise.
- */
-int checkQueue();
-
-/**
- * @brief Clears the queue for all orders and fills it with empty orders.
- * 
- * @param queue A queue of ElevatorOrder
- * @param length Length of queue
- * 
- * @warning Will only be called when stop button is pushed.
- */
-void clearQueue();
 
 /**
  * @brief Sets the elevator to floor 1 as default start.

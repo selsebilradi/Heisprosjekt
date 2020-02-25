@@ -310,3 +310,19 @@ void sortQueue(){
         break;
     }
 }
+int checkQueue(){
+	if (g_queue[0].floor == -1){
+		return 0;
+	}
+
+	else{
+		return 1;
+	}
+}
+
+void clearQueue(){
+	for (int i = 0; i < g_queue_length; i++){
+		g_queue[i].floor     = -1;
+		g_queue[i].orderType = HARDWARE_ORDER_INSIDE;
+	}
+}
