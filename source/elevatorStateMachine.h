@@ -61,10 +61,10 @@ void clearQueue(ElevatorOrder * queue, int length);
 void elevatorInit();
 
 /**
- * @brief Elevator functionality when stop button is pressed.
+ * @brief Elevator functionality when stop button is pressed or the obstuction switch is active.
  * 
  */
-void elevatorSafetyFunction(); //kan ha et bedre navn
+void elevatorSafetyFunction(); 
 /**
  * @brief Changes the state of the elevator when queue is empty.
  * 
@@ -80,7 +80,7 @@ void emptyQueue();
 void timer(int seconds);
 
 /**
- * @brief Checks if elevator is at floor in the first order.
+ * @brief Checks if elevator is at floor in the first element of the queue.
  * 
  * 
  */
@@ -98,23 +98,9 @@ void checkAndSetLights();
  */
 void clearAllOrderLights();
 
-/**
- * @brief The logic for the elevator.
- * 
- * @return Returns 1 if elevator is at ordered floor, and 0 if not.
- */
 
 /**
- * @brief Prints the queue in a nice format
- * 
- * @param queue the queue you want to print.
- * @param length length of the queue that you want to print.
- */
-
-void printQueue();
-
-/**
- * @brief Polls the buttons and checks for orders.
+ * @brief Polls the buttons and checks for orders. If there is any it calls addOrder() with that order.
  * 
  *
  */

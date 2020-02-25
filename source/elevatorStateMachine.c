@@ -1,4 +1,3 @@
-#define _DEFAULT_SOURCE
 
 #include "elevatorStateMachine.h"
 #include <stdio.h>
@@ -29,10 +28,11 @@ void elevatorSafetyFunction(){
 	switch (hardware_read_stop_signal())
 	{
 	case 1:
-	clearQueue(g_queue, g_queue_length);
+	clearQueue();
 	clearAllOrderLights();
 	hardware_command_movement(HARDWARE_MOVEMENT_STOP);
 	hardware_command_stop_light(1);
+
 		while(hardware_read_stop_signal()){
 			if (hardware_read_floor_sensor(0) || hardware_read_floor_sensor(1) || hardware_read_floor_sensor(2) || hardware_read_floor_sensor(3)){
 				hardware_command_door_open(1);
@@ -40,6 +40,7 @@ void elevatorSafetyFunction(){
 				g_state=DOOR_OPEN;
 			}
 		}
+
 		hardware_command_stop_light(0);
 		timer(3);
 		hardware_command_door_open(0);
@@ -49,7 +50,9 @@ void elevatorSafetyFunction(){
 		if (g_state != DOOR_OPEN){
 			break;
 		}
+
 		hardware_command_door_open(1);
+
 		while(hardware_read_obstruction_signal() == 1){
 			checkAndSetLights();
 			checkAndAddOrders();
@@ -64,25 +67,26 @@ void elevatorSafetyFunction(){
 }
 
 void emptyQueue(){
-	if (checkQueue(g_queue) == 0){
+	if (checkQueue() == 0){
 		g_state = STANDING_STILL;
 		hardware_command_door_open(0);
 	}
 }
 
-int checkQueue(ElevatorOrder * queue){
-	if (queue[0].floor == -1){
+int checkQueue(){
+	if (g_queue[0].floor == -1){
 		return 0;
 	}
+
 	else{
 		return 1;
 	}
 }
 
-void clearQueue(ElevatorOrder * queue, int length){
-	for (int i = 0; i < length; i++){
-		queue[i].floor     = -1;
-		queue[i].orderType = HARDWARE_ORDER_INSIDE;
+void clearQueue(){
+	for (int i = 0; i < g_queue_length; i++){
+		g_queue[i].floor     = -1;
+		g_queue[i].orderType = HARDWARE_ORDER_INSIDE;
 	}
 }
 
@@ -90,6 +94,7 @@ void elevatorInit(){
 	
 	g_floor = 0;
 	hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+
 	while (1){
 		if (hardware_read_floor_sensor(g_floor) == 1){
 			hardware_command_movement(HARDWARE_MOVEMENT_STOP);
@@ -112,7 +117,7 @@ void elevatorInit(){
 
 	hardware_command_floor_indicator_on(g_floor);
 	g_state = STANDING_STILL;
-	clearQueue(g_queue, g_queue_length);
+	clearQueue();
 }
 
 void checkAndAddOrders(){
@@ -143,6 +148,7 @@ void timer(int seconds){
 			elevatorSafetyFunction();
 			break;
 		}
+
 		if((hardware_read_order(g_floor, HARDWARE_ORDER_UP) || hardware_read_order(g_floor, HARDWARE_ORDER_DOWN) || hardware_read_order(g_floor, HARDWARE_ORDER_INSIDE)) && (g_state == DOOR_OPEN)){
 			timer(3);
 			break;
@@ -217,7 +223,7 @@ static void sigint_handler(int sig){
 }
 
 int FSM(){
-
+	printf("Initializing elevator... Please wait.\n");
 	int error = hardware_init();
     if(error != 0){
         fprintf(stderr, "Unable to initialize hardware\n");
@@ -227,6 +233,7 @@ int FSM(){
 	signal(SIGINT, sigint_handler);
 	
 	elevatorInit();
+	printf("The elevator is now initialized.\nYou may order at your leisure.\n");
 
 	int stopped = 0;
 
@@ -237,6 +244,10 @@ int FSM(){
 		updateCurrentFloor();
 		sortQueue();
 
+		if (hardware_read_floor_sensor(0) || hardware_read_floor_sensor(1) || hardware_read_floor_sensor(2) || hardware_read_floor_sensor(3)){
+			stopped = 0;
+		}
+
 	switch (g_state)
 	{
 		case STANDING_STILL:
@@ -244,7 +255,7 @@ int FSM(){
 				elevatorSafetyFunction();
 			}
 
-			if (checkQueue(g_queue) == 1){
+			if (checkQueue() == 1){
 
 				if (g_floor < g_queue[0].floor){
 					g_state = MOVE_UP;
@@ -271,15 +282,15 @@ int FSM(){
 		case DOOR_OPEN:
 			hardware_command_movement(HARDWARE_MOVEMENT_STOP);
 			floorReached(g_floor);
+
 			if(hardware_read_stop_signal()||hardware_read_obstruction_signal()){
 				elevatorSafetyFunction();
-
 			}
+
 			g_state = STANDING_STILL;
 			break;
 
 		case MOVE_UP:
-			stopped = 0;
 			sortQueue();
 			hardware_command_movement(HARDWARE_MOVEMENT_UP);
 
@@ -289,13 +300,15 @@ int FSM(){
 
 			if(hardware_read_stop_signal()){
 				elevatorSafetyFunction();
-				stopped = 1;
+
+				if (stopped == 0){
+					stopped = 1;
+				}
 			}
 
 			break;
 
 		case MOVE_DOWN:
-			stopped = 0;
 			sortQueue();
 			hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
 
@@ -305,7 +318,9 @@ int FSM(){
 
 			if(hardware_read_stop_signal()){
 				elevatorSafetyFunction();
-				stopped = -1;
+				if (stopped == 0){
+					stopped = -1;
+				}
 			}
 
 			break;

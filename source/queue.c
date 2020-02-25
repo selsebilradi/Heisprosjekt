@@ -18,7 +18,6 @@ void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor){
 
 	int* indexes = malloc(numberOfOrders*sizeof(int));
 
-
 	int offset = 0;
 
 	for (int i = 0; i < length; i++){
