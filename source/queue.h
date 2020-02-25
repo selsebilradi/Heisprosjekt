@@ -24,14 +24,6 @@ typedef struct{
 
 void deleteOrdersOnFloor(ElevatorOrder * queue, int length, int floor);
 
- /**
- * @brief Sorts @p queue for efficient and correct elevator behaviourss
- *
- * @param queue A queue of ElevatorOrders
- * @param length Length of @p queue 
- * @param state State of elevator
- */
-//void sortQueue(ElevatorOrder* queue, int length, State state, int floor);
 
 /**
  * @brief Adds order to the queue if the order is not placed in queue before.
