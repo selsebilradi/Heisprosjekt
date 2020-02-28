@@ -8,9 +8,11 @@
 #include <time.h>
 
 State g_state;
+State g_prev_state;
 int g_queue_length=10;
 ElevatorOrder g_queue[10];
 int g_floor;
+
 
 void floorReached(int floor){
 	hardware_command_door_open(1); 
@@ -37,14 +39,14 @@ void elevatorSafetyFunction(){
 			if (hardware_read_floor_sensor(0) || hardware_read_floor_sensor(1) || hardware_read_floor_sensor(2) || hardware_read_floor_sensor(3)){
 				hardware_command_door_open(1);
 
-				g_state=DOOR_OPEN;
+				g_state = DOOR_OPEN;
 			}
 		}
 
 		hardware_command_stop_light(0);
 		timer(3);
 		hardware_command_door_open(0);
-		g_state=STANDING_STILL;
+		g_state = STANDING_STILL;
 		break;
 	case 0:
 		if (g_state != DOOR_OPEN){
@@ -93,6 +95,7 @@ void elevatorInit(){
 
 	hardware_command_floor_indicator_on(g_floor);
 	g_state = STANDING_STILL;
+	g_prev_state = STANDING_STILL;
 	clearQueue();
 }
 
@@ -229,28 +232,34 @@ int FSM(){
 		case STANDING_STILL:
 			if(hardware_read_stop_signal()){
 				elevatorSafetyFunction();
+				g_prev_state = STANDING_STILL;
 			}
 
 			if (checkQueue() == 1){
 
 				if (g_floor < g_queue[0].floor){
 					g_state = MOVE_UP;
+					g_prev_state = STANDING_STILL;
 				}
 
 				else if (g_queue[0].floor < g_floor){
 					g_state = MOVE_DOWN;
+					g_prev_state = STANDING_STILL;
 				}
 
 				else if ((g_queue[0].floor == g_floor) && (stopped == 0)){
 					g_state  = DOOR_OPEN;
+					g_prev_state = STANDING_STILL;
 				}
 
 				else if ((g_queue[0].floor == g_floor) && (stopped == -1)){
 					g_state  = MOVE_UP;
+					g_prev_state = STANDING_STILL;
 				}
 
 				else if ((g_queue[0].floor == g_floor) && (stopped == 1)){
-					g_state  = MOVE_DOWN;	
+					g_state  = MOVE_DOWN;
+					g_prev_state = STANDING_STILL;	
 				}	
 			}
 			break;
@@ -261,9 +270,11 @@ int FSM(){
 
 			if(hardware_read_stop_signal()||hardware_read_obstruction_signal()){
 				elevatorSafetyFunction();
+				g_prev_state = DOOR_OPEN;
 			}
 
 			g_state = STANDING_STILL;
+			g_prev_state = DOOR_OPEN;
 			break;
 
 		case MOVE_UP:
@@ -272,10 +283,12 @@ int FSM(){
 
 			if(checkDestination() == 1){
 				g_state = DOOR_OPEN;
+				g_prev_state = MOVE_UP;
 			}
 
 			if(hardware_read_stop_signal()){
 				elevatorSafetyFunction();
+				g_prev_state = MOVE_UP;
 
 				if (stopped == 0){
 					stopped = 1;
@@ -290,10 +303,12 @@ int FSM(){
 
 			if (checkDestination()){
 				g_state = DOOR_OPEN;
+				g_prev_state = MOVE_DOWN;
 			}
 
 			if(hardware_read_stop_signal()){
 				elevatorSafetyFunction();
+				g_prev_state = MOVE_DOWN;
 				if (stopped == 0){
 					stopped = -1;
 				}

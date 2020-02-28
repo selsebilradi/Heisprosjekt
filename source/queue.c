@@ -49,18 +49,40 @@ void addOrder(int floor,HardwareOrder orderType){
 			duplicate = 1;	
 		}	
 	}
-
+    
 	if (duplicate == 0){
-		for (int j = 0; j < g_queue_length; j++){
-			if(g_queue[j].floor == -1 && g_queue[j].orderType == HARDWARE_ORDER_INSIDE){
-                if (g_state == DOOR_OPEN && floor == g_floor){
+        if (g_state == DOOR_OPEN && g_prev_state == MOVE_UP && floor > g_floor && g_queue[0].floor < g_floor){
+            for (int i = g_queue_length - 1; i > 0; i--){
+                g_queue[i].floor     = g_queue[i-1].floor;
+                g_queue[i].orderType = g_queue[i-1].orderType;
+            }
+
+            g_queue[0].floor     = floor;
+            g_queue[0].orderType = orderType;
+        }
+
+        else if (g_state == DOOR_OPEN && g_prev_state == MOVE_DOWN && floor < g_floor && g_queue[0].floor > floor){
+            for (int i = g_queue_length - 1; i > 0; i--){
+                g_queue[i].floor     = g_queue[i-1].floor;
+                g_queue[i].orderType = g_queue[i-1].orderType;
+            }
+            
+            g_queue[0].floor     = floor;
+            g_queue[0].orderType = orderType;
+        }
+
+        else{
+            for (int j = 0; j < g_queue_length; j++){
+                if(g_queue[j].floor == -1 && g_queue[j].orderType == HARDWARE_ORDER_INSIDE){
+                    if (g_state == DOOR_OPEN && floor == g_floor){
+                        break;
+                    }
+
+                    g_queue[j].floor     = floor;
+                    g_queue[j].orderType = orderType;
                     break;
                 }
-
-				g_queue[j].floor     = floor;
-				g_queue[j].orderType = orderType;
-				break;
-			}
+            }
 		}
 	}
 }
@@ -305,7 +327,6 @@ void sortQueue(){
         free(relevantOrders);
         free(upOrders);
     }
-        break;
     default:
         break;
     }

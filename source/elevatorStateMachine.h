@@ -23,6 +23,7 @@ typedef enum {
 } State;
 
 extern State g_state;
+extern State g_prev_state;
 extern int g_queue_length;
 extern int g_floor;
 extern ElevatorOrder g_queue[10];
